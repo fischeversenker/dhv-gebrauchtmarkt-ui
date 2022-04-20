@@ -1,0 +1,16 @@
+{
+  "name": "dhv-gebrauchtmarkt-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start:frontend": "live-server src",
+    "start:backend": "deno run --allow-net --watch backend/src/main.ts"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  },
+  "dependencies": {
+    "bulma": "^0.9.3"
+  }
+}
