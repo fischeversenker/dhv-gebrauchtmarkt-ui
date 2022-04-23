@@ -5,6 +5,7 @@
   "deno.enablePaths": [
     "./backend"
   ],
+  "deno.codeLens.test": true,
   "cSpell.words": [
     "dhvsid"
   ]
