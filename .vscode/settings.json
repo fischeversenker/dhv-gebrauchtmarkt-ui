@@ -2,5 +2,10 @@
   "deno.enable": true,
   "deno.lint": true,
   "deno.unstable": true,
-  "deno.enablePaths": ["./backend"]
+  "deno.enablePaths": [
+    "./backend"
+  ],
+  "cSpell.words": [
+    "dhvsid"
+  ]
 }

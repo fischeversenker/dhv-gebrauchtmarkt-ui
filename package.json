@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start:frontend": "live-server src",
-    "start:backend": "deno run --allow-net --allow-write --allow-read --watch backend/src/main.ts"
+    "start:backend": "deno run --allow-net --watch backend/src/server.ts"
   },
   "devDependencies": {
     "live-server": "^1.2.1"
