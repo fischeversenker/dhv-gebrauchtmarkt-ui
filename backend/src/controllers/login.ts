@@ -2,7 +2,7 @@ import { Router } from 'https://deno.land/x/oak@v10.5.1/mod.ts';
 import { isUserLoggedIn, login } from '../services/user.ts';
 
 export const loginRouter = new Router()
-  .post('/login', async (context) => {
+  .post('/', async (context) => {
     const sessionId = await context.cookies.get('dhvsid');
     if (await isUserLoggedIn(sessionId)) {
       context.response.body = 'is still logged in';
