@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v10.5.1/mod.ts";
+import { Router } from 'https://deno.land/x/oak@v10.5.1/mod.ts';
 import { isUserLoggedIn, login } from '../services/user.ts';
 
 export const loginRouter = new Router()
