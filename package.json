@@ -18,8 +18,5 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.4.0",
     "live-server": "^1.2.1"
-  },
-  "dependencies": {
-    "bulma": "^0.9.3"
   }
 }
