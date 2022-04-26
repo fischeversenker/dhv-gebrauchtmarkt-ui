@@ -4,8 +4,10 @@ import { collectOffers } from '../services/offers.ts';
 
 export const offersRouter = new Router()
   .get('/', async (context) => {
+    const itemsPerPage = Number(context.request.url.searchParams.get('itemsPerPage') || '10');
+    const offset = Number(context.request.url.searchParams.get('offset') || '0');
     const offersResponse = await request(
-      'https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigen?suchbegriff=&rubrik=1&preismin=&preismax=&anbietertyp=0&land=0&plz=&itemsperpage=5&order=1',
+      `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigen?rubrik=1&land=0&itemsperpage=${itemsPerPage}&order=1&start=${offset}`,
     ).then((res) => res.json());
     const offersRawHtml = offersResponse.content;
     const offers = collectOffers(offersRawHtml);
