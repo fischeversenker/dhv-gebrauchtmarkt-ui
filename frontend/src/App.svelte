@@ -6,11 +6,33 @@
   let offers = [];
 
   let currentOffset = 0;
-  let isLoadingMore = false;
+  let selectedCategory = 0;
+  let isLoading = false;
   let itemsPerPage = 5;
 
+  let categories = [
+    {
+      value: 0,
+      label: 'All',
+    },
+    {
+      value: 1,
+      label: 'Gleitschirme',
+    },
+    {
+      value: 11,
+      label: 'Gurtzeuge',
+    },
+    {
+      value: 4,
+      label: 'Retter',
+    }
+  ];
+
   async function getOffers(offset = 0) {
-    const receivedOffers = await fetch(`http://localhost:8000/offers?offset=${offset}&itemsPerPage=${itemsPerPage}`).then(res => res.json());
+    isLoading = true;
+    const receivedOffers = await fetch(`http://localhost:8000/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${selectedCategory}`).then(res => res.json());
+    isLoading = false;
     return receivedOffers.map(offer => {
       return {
         ...offer,
@@ -20,12 +42,19 @@
     });
   }
 
+  async function setCategory(category: number) {
+    if (selectedCategory === category)
+      return;
+
+    selectedCategory = category;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    offers = await getOffers();
+  }
+
   function loadMoreOffers() {
     currentOffset += itemsPerPage;
-    isLoadingMore = true;
     getOffers(currentOffset).then(newOffers => {
       offers = offers.concat(newOffers);
-      isLoadingMore = false;
     });
   }
 
@@ -52,8 +81,16 @@
   </section>
 
   <section class="section">
-    <button class="button is-primary is-fullwidth" class:is-loading={isLoadingMore} on:click={() => loadMoreOffers()}>Load more</button>
+    <button class="button is-primary is-fullwidth" class:is-loading={isLoading} on:click={() => loadMoreOffers()}>Load more</button>
   </section>
+
+  <nav class="level is-mobile has-background-light m-0 px-5 py-4 category-select">
+    {#each categories as category}
+      <div class="level-item">
+        <button class="button" class:is-info={selectedCategory === category.value} class:is-loading={isLoading} on:click={() => setCategory(category.value)}>{category.label}</button>
+      </div>
+    {/each}
+  </nav>
 
   <footer class="footer">
     <div class="content has-text-centered">
@@ -65,3 +102,12 @@
     </div>
   </footer>
 </main>
+
+<style>
+  .category-select {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%)
+  }
+</style>
