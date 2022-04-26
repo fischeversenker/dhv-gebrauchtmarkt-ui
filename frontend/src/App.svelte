@@ -1,38 +1,17 @@
 <script lang="ts">
   import 'bulma/css/bulma.css';
-  import { onMount } from 'svelte';
-  import Offer from './components/Offer.svelte';
-
-  let offers = [];
+  import { onDestroy, onMount } from 'svelte';
+  import CategorySelect from './components/CategorySelect.svelte';
+  import OfferCard from './components/OfferCard.svelte';
+  import { isLoading, offers, selectedCategory } from './store';
 
   let currentOffset = 0;
-  let selectedCategory = 0;
-  let isLoading = false;
   let itemsPerPage = 5;
 
-  let categories = [
-    {
-      value: 0,
-      label: 'All',
-    },
-    {
-      value: 1,
-      label: 'Gleitschirme',
-    },
-    {
-      value: 11,
-      label: 'Gurtzeuge',
-    },
-    {
-      value: 4,
-      label: 'Retter',
-    }
-  ];
-
-  async function getOffers(offset = 0) {
-    isLoading = true;
-    const receivedOffers = await fetch(`http://localhost:8000/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${selectedCategory}`).then(res => res.json());
-    isLoading = false;
+  async function getOffers(offset = 0, category = 0) {
+    isLoading.set(true);
+    const receivedOffers = await fetch(`http://localhost:8000/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${category}`).then(res => res.json());
+    isLoading.set(false);
     return receivedOffers.map(offer => {
       return {
         ...offer,
@@ -42,24 +21,25 @@
     });
   }
 
-  async function setCategory(category: number) {
-    if (selectedCategory === category)
-      return;
-
-    selectedCategory = category;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    offers = await getOffers();
-  }
-
   function loadMoreOffers() {
     currentOffset += itemsPerPage;
     getOffers(currentOffset).then(newOffers => {
-      offers = offers.concat(newOffers);
+      offers.update((offers) => offers.concat(newOffers));
     });
   }
 
+  const unsubscribeSelectedCategory = selectedCategory.subscribe(async (category) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentOffset = 0;
+    offers.set(await getOffers(0, category));
+  });
+
   onMount(async () => {
-    offers = await getOffers();
+    offers.set(await getOffers());
+  });
+
+  onDestroy(() => {
+    unsubscribeSelectedCategory();
   });
 </script>
 
@@ -73,24 +53,18 @@
   </section>
 
   <section class="section">
-    {#each offers as offer}
+    {#each $offers as offer}
       <div class="block">
-        <Offer offer={offer} />
+        <OfferCard offer={offer} />
       </div>
     {/each}
   </section>
 
   <section class="section">
-    <button class="button is-primary is-fullwidth" class:is-loading={isLoading} on:click={() => loadMoreOffers()}>Load more</button>
+    <button class="button is-primary is-fullwidth" class:is-loading={$isLoading} on:click={() => loadMoreOffers()}>Load more</button>
   </section>
 
-  <nav class="level is-mobile has-background-light m-0 px-5 py-4 category-select">
-    {#each categories as category}
-      <div class="level-item">
-        <button class="button" class:is-info={selectedCategory === category.value} class:is-loading={isLoading} on:click={() => setCategory(category.value)}>{category.label}</button>
-      </div>
-    {/each}
-  </nav>
+  <CategorySelect />
 
   <footer class="footer">
     <div class="content has-text-centered">
@@ -102,12 +76,3 @@
     </div>
   </footer>
 </main>
-
-<style>
-  .category-select {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%)
-  }
-</style>
