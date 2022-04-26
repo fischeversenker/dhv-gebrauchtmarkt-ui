@@ -6,6 +6,7 @@ type SellerType = 'private' | 'commercial';
 interface Offer {
   id: number;
   title: string;
+  subtitle?: string;
   thumbnailUrl: string;
   price?: number;
   priceType?: PriceType;
@@ -40,7 +41,14 @@ function offerFromOfferElement(offerElement: Element): Offer {
     '<br>',
     '\n',
   ).trim()!;
-  const title = descriptionElement?.querySelector('h2')?.textContent!;
+
+  const rawTitle = descriptionElement?.querySelector('h2')?.textContent!;
+  let title = rawTitle;
+  let subtitle = undefined;
+  if (rawTitle.includes('|')) {
+    title = title.split('|')[0].trim();
+    subtitle = rawTitle.split('|')[1].trim();
+  }
   const url = offerElement.querySelector('.gm_offer_btn')?.getAttribute('href')!;
   const id = Number(url.match(/\/id\/(\d+)/)![1]);
 
@@ -81,6 +89,7 @@ function offerFromOfferElement(offerElement: Element): Offer {
   return {
     id,
     title,
+    subtitle,
     thumbnailUrl,
     shortDescription,
     price,
