@@ -45,11 +45,9 @@
 
 <main>
   <section class="section">
-    <div class="container">
-      <p class="title is-1">
-        DHV Gebrauchtmarkt 2.0
-      </p>
-    </div>
+    <h1 class="title is-3">
+      DHV Gebrauchtmarkt 2.0
+    </h1>
   </section>
 
   <section class="section">
