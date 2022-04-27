@@ -7,6 +7,7 @@
 
   let currentOffset = 0;
   let itemsPerPage = 5;
+  let currentlySelectedCategory = 0;
 
   async function getOffers(offset = 0, category = 0) {
     isLoading.set(true);
@@ -23,7 +24,7 @@
 
   function loadMoreOffers() {
     currentOffset += itemsPerPage;
-    getOffers(currentOffset).then(newOffers => {
+    getOffers(currentOffset, currentlySelectedCategory).then(newOffers => {
       offers.update((offers) => offers.concat(newOffers));
     });
   }
@@ -31,7 +32,8 @@
   const unsubscribeSelectedCategory = selectedCategory.subscribe(async (category) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     currentOffset = 0;
-    offers.set(await getOffers(0, category));
+    currentlySelectedCategory = category;
+    offers.set(await getOffers(currentOffset, currentlySelectedCategory));
   });
 
   onDestroy(() => {
