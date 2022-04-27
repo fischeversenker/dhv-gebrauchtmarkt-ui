@@ -1,6 +1,6 @@
 <script lang="ts">
   import 'bulma/css/bulma.css';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy } from 'svelte';
   import CategorySelect from './components/CategorySelect.svelte';
   import OfferCard from './components/OfferCard.svelte';
   import { isLoading, offers, selectedCategory } from './store';
@@ -32,10 +32,6 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
     currentOffset = 0;
     offers.set(await getOffers(0, category));
-  });
-
-  onMount(async () => {
-    offers.set(await getOffers());
   });
 
   onDestroy(() => {
