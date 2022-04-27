@@ -1,15 +1,28 @@
 <script lang="ts">
   import 'bulma/css/bulma.css';
   import { onDestroy } from 'svelte';
+  import { fade } from 'svelte/transition';
+  import { writable } from 'svelte/store';
   import CategorySelect from './components/CategorySelect.svelte';
   import OfferCard from './components/OfferCard.svelte';
-  import { isLoading, offers, selectedCategory } from './store';
+  import { isLoading, isLoadingMore, offers, selectedCategory } from './store';
+
+  const initialOffersGotLoaded = writable(false);
 
   let currentOffset = 0;
   let itemsPerPage = 5;
-  let currentlySelectedCategory = 0;
 
-  async function getOffers(offset = 0, category = 0) {
+  let footer: HTMLElement;
+
+  const observerCallback = (entries: IntersectionObserverEntry[]) => {
+    if (entries[0]?.intersectionRatio >= 0.2) {
+      loadMoreOffers();
+    }
+  }
+
+  const observer = new IntersectionObserver(observerCallback, { threshold: 0.2 });
+
+  async function getOffers(offset: number, category: number) {
     isLoading.set(true);
     const receivedOffers = await fetch(`${process.env.API_BASE}/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${category}`).then(res => res.json());
     isLoading.set(false);
@@ -24,20 +37,29 @@
 
   function loadMoreOffers() {
     currentOffset += itemsPerPage;
-    getOffers(currentOffset, currentlySelectedCategory).then(newOffers => {
+    isLoadingMore.set(true);
+    getOffers(currentOffset, $selectedCategory).then(newOffers => {
       offers.update((offers) => offers.concat(newOffers));
+      isLoadingMore.set(false);
     });
   }
 
   const unsubscribeSelectedCategory = selectedCategory.subscribe(async (category) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     currentOffset = 0;
-    currentlySelectedCategory = category;
-    offers.set(await getOffers(currentOffset, currentlySelectedCategory));
+    offers.set(await getOffers(currentOffset, category));
+    initialOffersGotLoaded.set(true);
+  });
+
+  const unsubscribeInitialOffersGotLoaded = initialOffersGotLoaded.subscribe((gotLoaded) => {
+    if (gotLoaded) {
+      observer.observe(footer);
+    }
   });
 
   onDestroy(() => {
     unsubscribeSelectedCategory();
+    unsubscribeInitialOffersGotLoaded();
   });
 </script>
 
@@ -54,21 +76,14 @@
         <OfferCard offer={offer} />
       </div>
     {/each}
+    {#if $isLoadingMore}
+      <div class="block" in:fade>
+        <progress class="progress is-info" max="100">0%</progress>
+      </div>
+    {/if}
   </section>
 
-  <section class="section">
-    <button class="button is-primary is-fullwidth" class:is-loading={$isLoading} on:click={() => loadMoreOffers()}>Load more</button>
-  </section>
+  <footer class="footer" bind:this={footer}></footer>
 
   <CategorySelect />
-
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-      </p>
-    </div>
-  </footer>
 </main>
