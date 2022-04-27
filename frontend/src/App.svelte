@@ -10,7 +10,7 @@
 
   async function getOffers(offset = 0, category = 0) {
     isLoading.set(true);
-    const receivedOffers = await fetch(`http://localhost:8000/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${category}`).then(res => res.json());
+    const receivedOffers = await fetch(`${process.env.API_BASE}/offers?offset=${offset}&itemsPerPage=${itemsPerPage}&category=${category}`).then(res => res.json());
     isLoading.set(false);
     return receivedOffers.map(offer => {
       return {
