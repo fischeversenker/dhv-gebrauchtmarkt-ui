@@ -17,4 +17,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "dhv-gebrauchtmarkt-proxy"
-          entrypoint: "./backend/src/server.ts"
+          entrypoint: server.ts
+          root: "./backend/src"
