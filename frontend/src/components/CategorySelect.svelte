@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isLoading, selectedCategory } from "../store";
+  import { isLoading, filterCategory } from "../store";
 
   let categories = [
     {
@@ -21,10 +21,12 @@
   ];
 
   async function setCategory(category: number) {
-    if ($selectedCategory === category)
+    if ($filterCategory === category) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
+    }
 
-    selectedCategory.set(category);
+    filterCategory.set(category);
   }
 </script>
 
@@ -32,7 +34,7 @@
   <nav class="level is-mobile has-background-light m-0 px-5 py-4 category-select">
     {#each categories as category}
       <div class="level-item">
-        <button class="button" class:is-info={$selectedCategory === category.value} class:is-loading={$isLoading} on:click={() => setCategory(category.value)}>{category.label}</button>
+        <button class="button" class:is-info={$filterCategory === category.value} class:is-loading={$isLoading} on:click={() => setCategory(category.value)}>{category.label}</button>
       </div>
     {/each}
   </nav>
