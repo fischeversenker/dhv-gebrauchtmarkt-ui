@@ -22,8 +22,12 @@
 
   async function setCategory(category: number) {
     if ($filterCategory === category) {
+      if (category === 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
       filterCategory.set(0);
-      // window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 

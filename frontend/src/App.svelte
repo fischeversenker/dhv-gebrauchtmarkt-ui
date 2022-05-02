@@ -1,12 +1,11 @@
 <script lang="ts">
   import 'bulma/css/bulma.css';
   import { onDestroy } from 'svelte';
-  import { fade } from 'svelte/transition';
+  import { offers, filterCategory, initialOffersGotLoaded, offersOffset } from './store';
+  import { getOffers } from './offers';
   import CategorySelect from './components/CategorySelect.svelte';
   import InifinityLoadingFooter from './components/InfinityLoadingFooter.svelte';
-  import OfferCard from './components/OfferCard.svelte';
-  import { isLoadingMore, offers, filterCategory, initialOffersGotLoaded, offersOffset } from './store';
-  import { getOffers } from './offers';
+  import OfferList from './components/OfferList.svelte';
 
   const unsubscribeSelectedCategory = filterCategory.subscribe(async (category) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -27,18 +26,7 @@
     </h1>
   </section>
 
-  <section class="section">
-    {#each $offers as offer}
-      <div class="block">
-        <OfferCard offer={offer} />
-      </div>
-    {/each}
-    {#if $isLoadingMore}
-      <div class="block" in:fade>
-        <progress class="progress is-info" max="100">0%</progress>
-      </div>
-    {/if}
-  </section>
+  <OfferList />
 
   <InifinityLoadingFooter />
 
