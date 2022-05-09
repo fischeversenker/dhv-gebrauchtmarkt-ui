@@ -8,7 +8,7 @@
   <section class="section">
     <div class="block tile-view-toggle">
       <button class="button" on:click={() => $tileView = !$tileView}>
-        {$tileView ? 'Listenansicht' : 'Kachelansicht'}
+        <i class="fa-solid" class:fa-grip-vertical={!$tileView} class:fa-grip-lines={$tileView}></i>
       </button>
     </div>
     <div class:grid--active={$tileView}>
@@ -31,7 +31,6 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 0.5rem;
-    padding: 2rem 0.5rem;
   }
 
   .tile-view-toggle {

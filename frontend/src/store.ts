@@ -12,4 +12,4 @@ export const filterCategory = writable(0);
 
 export const itemsPerPage = writable(6);
 
-export const tileView = writable(true);
+export const tileView = writable(false);

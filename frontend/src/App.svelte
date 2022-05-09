@@ -1,5 +1,4 @@
 <script lang="ts">
-  import 'bulma/css/bulma.css';
   import { onDestroy } from 'svelte';
   import { offers, filterCategory, initialOffersGotLoaded, offersOffset } from './store';
   import { getOffers } from './offers';
@@ -32,3 +31,7 @@
 
   <CategorySelect />
 </main>
+
+<style lang="scss" global>
+  @import 'bulma/bulma.sass';
+</style>
