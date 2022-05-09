@@ -56,7 +56,7 @@
         {#if offer.price || offer.priceType}
           <p class="title is-5">
             {#if offer.price}<strong>{offer.price} €</strong>{/if}
-            {#if offer.priceType}<span class="has-text-grey">({offer.priceType})</span>{/if}
+            {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
           </p>
         {/if}
       </div>

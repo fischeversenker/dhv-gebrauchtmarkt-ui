@@ -1,6 +1,6 @@
 import { DOMParser, Element } from 'https://deno.land/x/deno_dom@v0.1.22-alpha/deno-dom-wasm.ts';
 
-type PriceType = 'VB' | 'Fixed' | 'OnRequest' | 'HighestBid';
+type PriceType = 'VB' | 'Fixpreis' | 'Auf Anfrage' | 'Höchstgebot';
 type SellerType = 'private' | 'commercial';
 
 interface Offer {
@@ -72,17 +72,16 @@ function offerFromOfferElement(offerElement: Element): Offer {
   let price: number | undefined = undefined;
   let priceType: PriceType | undefined = undefined;
   if (priceString.includes('Auf Anfrage')) {
-    priceType = 'OnRequest';
-    price = undefined;
+    priceType = 'Auf Anfrage';
   } else if (priceString.includes('Höchstgebot')) {
-    priceType = 'HighestBid';
+    priceType = 'Höchstgebot';
   } else {
     price = Number(priceString);
     const priceTypeString = offerElement.querySelector('.gm_price_type')?.textContent?.trim()!;
     if (priceTypeString.includes('VB')) {
       priceType = 'VB';
     } else if (priceTypeString.includes('Fixpreis')) {
-      priceType = 'Fixed';
+      priceType = 'Fixpreis';
     }
   }
 
