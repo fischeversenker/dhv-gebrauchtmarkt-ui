@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isLoading, filterCategory } from "../store";
+  import { isLoading, filterCategory, filterSearchString } from "../store";
 
   let categories = [
     {
@@ -35,8 +35,17 @@
   }
 </script>
 
+
 <main>
   <nav class="level is-mobile has-background-light m-0 px-5 py-4 category-select">
+    <div class="level-item">
+      <p class="control has-icons-left">
+        <input class="input" type="search" placeholder="Search..." bind:value={$filterSearchString} />
+        <span class="icon is-small is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </p>
+    </div>
     {#each categories as category}
       <div class="level-item">
         <button class="button" class:is-info={$filterCategory === category.value} class:is-loading={$isLoading} on:click={() => setCategory(category.value)}>{category.label}</button>
@@ -44,6 +53,7 @@
     {/each}
   </nav>
 </main>
+
 
 <style>
   .category-select {

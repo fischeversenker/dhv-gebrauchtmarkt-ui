@@ -4,6 +4,7 @@
   import OfferCard from './OfferCard.svelte';
 </script>
 
+
 <main>
   <section class="section">
     <div class="block tile-view-toggle">

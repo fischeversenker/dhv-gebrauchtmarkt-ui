@@ -4,11 +4,12 @@ import { collectOffers } from '../services/offers.ts';
 
 export const offersRouter = new Router()
   .get('/', async (context) => {
-    const itemsPerPage = context.request.url.searchParams.get('itemsPerPage') || '10';
-    const offset = context.request.url.searchParams.get('offset') || '0';
+    const itemsPerPage = context.request.url.searchParams.get('itemsPerPage') || 10;
+    const offset = context.request.url.searchParams.get('offset') || 0;
     const category = context.request.url.searchParams.get('category') || 0;
+    const search = context.request.url.searchParams.get('search') || '';
     const offersResponse = await request(
-      `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigen?rubrik=${category}&land=0&itemsperpage=${itemsPerPage}&order=1&start=${offset}`,
+      `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigen?suchbegriff=${search}&rubrik=${category}&land=0&itemsperpage=${itemsPerPage}&order=1&start=${offset}`,
     ).then((res) => res.json());
     const offersRawHtml = offersResponse.content;
     const offers = collectOffers(offersRawHtml);

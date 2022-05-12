@@ -26,6 +26,7 @@
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 </script>
 
+
 <main>
   <a href={offer.url} target="_blank">
     <div class="card" class:card--compact={$tileView}>
@@ -63,6 +64,7 @@
     </div>
   </a>
 </main>
+
 
 <style>
   .image img {

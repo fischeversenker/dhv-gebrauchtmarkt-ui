@@ -39,6 +39,7 @@
   });
 </script>
 
+
 <main>
   <footer class="footer" bind:this={footer}></footer>
 </main>
