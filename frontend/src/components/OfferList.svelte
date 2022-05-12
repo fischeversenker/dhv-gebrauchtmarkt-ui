@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-  import { offers, isLoadingMore, tileView } from '../store';
+  import { fade, blur } from 'svelte/transition';
+  import { offers, isLoadingMore, tileView, isLoading } from '../store';
   import OfferCard from './OfferCard.svelte';
 </script>
 
@@ -13,10 +13,20 @@
       </button>
     </div>
     <div class:grid--active={$tileView}>
-      {#each $offers as offer}
-        <div class="block">
+      {#each $offers as offer (offer.id)}
+        <div class="block" transition:blur={{ duration: 400, amount: 20 }}>
           <OfferCard offer={offer} />
         </div>
+      {:else}
+        {#if $isLoading}
+          <div class="block" in:fade>
+            <progress class="progress is-info" max="100">0%</progress>
+          </div>
+        {:else}
+          <div class="notification is-info">
+            Zu deiner Suche wurden keine Angebote gefunden. Bitte passe die Filter an.
+          </div>
+        {/if}
       {/each}
     {#if $isLoadingMore}
       <div class="block" in:fade>

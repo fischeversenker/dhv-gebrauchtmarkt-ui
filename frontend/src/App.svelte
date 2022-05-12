@@ -3,7 +3,7 @@
   import { debounce } from 'lodash';
   import { offers, filterCategory, initialOffersGotLoaded, offersOffset, filterSearchString } from './store';
   import { getOffers } from './offers';
-  import CategorySelect from './components/CategorySelect.svelte';
+  import FilterBar from './components/FilterBar.svelte';
   import InifinityLoadingFooter from './components/InfinityLoadingFooter.svelte';
   import OfferList from './components/OfferList.svelte';
 
@@ -44,7 +44,7 @@
 
   <InifinityLoadingFooter />
 
-  <CategorySelect />
+  <FilterBar />
 </main>
 
 
