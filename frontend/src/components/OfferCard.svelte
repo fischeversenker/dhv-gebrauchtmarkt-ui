@@ -73,7 +73,7 @@
   }
 
   .card--compact .card-content {
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .card--compact .content {
