@@ -76,6 +76,10 @@
     padding: 1rem 0.5rem;
   }
 
+  .card .content {
+    word-break: break-word;
+  }
+
   .card--compact .content {
     position: relative;
     height: 9rem;
