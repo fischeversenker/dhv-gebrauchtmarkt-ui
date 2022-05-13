@@ -4,7 +4,7 @@
   let categories = [
     {
       value: 0,
-      label: '🌐 Alle',
+      label: '🌐 Alles',
     },
     {
       value: 1,
@@ -17,6 +17,14 @@
     {
       value: 4,
       label: '⛑️ Retter',
+    },
+    {
+      value: 5,
+      label: '📳 Zubehör',
+    },
+    {
+      value: 13,
+      label: '❔ Sonstiges',
     }
   ];
 </script>
@@ -25,7 +33,7 @@
 <template>
   <nav class="is-flex is-justify-content-space-between has-background-light m-0 px-5 py-4 category-select">
     <div class="control has-icons-left is-flex-grow-1">
-      <input class="input" type="search" placeholder="Search..." bind:value={$filterSearchString} />
+      <input class="input" type="search" placeholder="Suche..." bind:value={$filterSearchString} />
       <span class="icon is-small is-left">
         <i class="fas fa-search"></i>
       </span>
