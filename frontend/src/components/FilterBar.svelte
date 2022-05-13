@@ -4,35 +4,33 @@
   let categories = [
     {
       value: 0,
-      label: 'Alle',
+      label: '🌐 Alle',
     },
     {
       value: 1,
-      label: 'Gleitschirme',
+      label: '🪂 Gleitschirme',
     },
     {
       value: 11,
-      label: 'Gurtzeuge',
+      label: '💺 Gurtzeuge',
     },
     {
       value: 4,
-      label: 'Retter',
+      label: '⛑️ Retter',
     }
   ];
 </script>
 
 
 <main>
-  <nav class="level is-mobile has-background-light m-0 px-5 py-4 category-select">
-    <div class="level-item">
-      <p class="control has-icons-left">
-        <input class="input" type="search" placeholder="Search..." bind:value={$filterSearchString} />
-        <span class="icon is-small is-left">
-          <i class="fas fa-search"></i>
-        </span>
-      </p>
+  <nav class="is-flex is-justify-content-space-between has-background-light m-0 px-5 py-4 category-select">
+    <div class="control has-icons-left is-flex-grow-1">
+      <input class="input" type="search" placeholder="Search..." bind:value={$filterSearchString} />
+      <span class="icon is-small is-left">
+        <i class="fas fa-search"></i>
+      </span>
     </div>
-    <div class="level-item">
+    <div class="control">
       <div class="select">
         <select on:change={(event) => $filterCategory = Number(event.currentTarget.value)}>
           {#each categories as category}
@@ -40,6 +38,7 @@
           {/each}
         </select>
       </div>
+    </div>
   </nav>
 </main>
 
@@ -49,5 +48,6 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+    gap: 1rem;
   }
 </style>
