@@ -12,7 +12,7 @@
 </script>
 
 
-<main>
+<template>
   <section class="section">
     <div class="block tile-view-toggle">
       <button class="button" on:click={toggleTileView}>
@@ -21,12 +21,12 @@
     </div>
     <div class:grid--active={$tileView}>
       {#each $offers as offer (offer.id)}
-        <div class="block" transition:blur={{ duration: 400, amount: 20 }}>
+        <div class:block={!$tileView} transition:blur={{ duration: 400, amount: 20 }}>
           <OfferCard offer={offer} />
         </div>
       {:else}
         {#if $isLoading}
-          <div class="block" in:fade>
+          <div class:block={!$tileView} in:fade>
             <progress class="progress is-info" max="100">0%</progress>
           </div>
         {:else}
@@ -36,12 +36,12 @@
         {/if}
       {/each}
     {#if $isLoadingMore}
-      <div class="block" in:fade>
+      <div class:block={!$tileView} in:fade>
         <progress class="progress is-info" max="100">0%</progress>
       </div>
     {/if}
   </section>
-</main>
+</template>
 
 
 <style>

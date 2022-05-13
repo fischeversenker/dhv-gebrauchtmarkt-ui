@@ -22,7 +22,7 @@
 </script>
 
 
-<main>
+<template>
   <nav class="is-flex is-justify-content-space-between has-background-light m-0 px-5 py-4 category-select">
     <div class="control has-icons-left is-flex-grow-1">
       <input class="input" type="search" placeholder="Search..." bind:value={$filterSearchString} />
@@ -40,7 +40,7 @@
       </div>
     </div>
   </nav>
-</main>
+</template>
 
 
 <style>

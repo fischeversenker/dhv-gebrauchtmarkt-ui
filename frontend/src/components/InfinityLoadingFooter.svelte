@@ -40,6 +40,6 @@
 </script>
 
 
-<main>
+<template>
   <footer class="footer" bind:this={footer}></footer>
-</main>
+</template>

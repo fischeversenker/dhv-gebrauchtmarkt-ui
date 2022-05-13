@@ -34,12 +34,6 @@
 
 
 <main>
-  <section class="section">
-    <h1 class="title is-3">
-      DHV Gebrauchtmarkt 2.0
-    </h1>
-  </section>
-
   <OfferList />
 
   <InifinityLoadingFooter />

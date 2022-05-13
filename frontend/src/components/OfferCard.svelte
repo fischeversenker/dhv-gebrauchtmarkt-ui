@@ -27,7 +27,7 @@
 </script>
 
 
-<main>
+<template>
   <a href={offer.url} target="_blank">
     <div class="card" class:card--compact={$tileView}>
       <div class="card-image">
@@ -63,7 +63,7 @@
       </div>
     </div>
   </a>
-</main>
+</template>
 
 
 <style>
@@ -86,6 +86,6 @@
     content: '';
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(to bottom, transparent 80%, white);
+    background-image: linear-gradient(to bottom, transparent 85%, white);
   }
 </style>
