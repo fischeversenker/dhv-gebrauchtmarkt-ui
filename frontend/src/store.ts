@@ -12,4 +12,5 @@ export const filterCategory = writable(0);
 
 export const itemsPerPage = writable(6);
 
-export const tileView = writable(false);
+export const TILE_VIEW_STORAGE_KEY = 'tileView';
+export const tileView = writable<boolean>(localStorage.getItem(TILE_VIEW_STORAGE_KEY) === 'true');

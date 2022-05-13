@@ -1,14 +1,21 @@
 <script lang="ts">
   import { fade, blur } from 'svelte/transition';
-  import { offers, isLoadingMore, tileView, isLoading } from '../store';
+  import { offers, isLoadingMore, tileView, isLoading, TILE_VIEW_STORAGE_KEY } from '../store';
   import OfferCard from './OfferCard.svelte';
+
+  function toggleTileView() {
+    tileView.update(currentValue => {
+      localStorage.setItem(TILE_VIEW_STORAGE_KEY, String(!currentValue));
+      return !currentValue;
+    });
+  }
 </script>
 
 
 <main>
   <section class="section">
     <div class="block tile-view-toggle">
-      <button class="button" on:click={() => $tileView = !$tileView}>
+      <button class="button" on:click={toggleTileView}>
         <i class="fa-solid" class:fa-grip-vertical={!$tileView} class:fa-grip-lines={$tileView}></i>
       </button>
     </div>
