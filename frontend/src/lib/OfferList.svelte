@@ -9,7 +9,7 @@
     TILE_VIEW_STORAGE_KEY,
     initialOffersGotLoaded
   } from './store';
-  import OfferCard from './OfferCard.svelte';
+  import OfferPreviewCard from './OfferPreviewCard.svelte';
 
   function toggleTileView() {
     tileView.update((currentValue) => {
@@ -30,7 +30,7 @@
     <div class:grid--active={$tileView}>
       {#each $offers as offer (offer.id)}
         <div class:block={!$tileView} in:blur={{ duration: 200, amount: 20 }}>
-          <OfferCard {offer} />
+          <OfferPreviewCard {offer} />
         </div>
       {:else}
         {#if $isLoading}
