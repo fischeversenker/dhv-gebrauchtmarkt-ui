@@ -37,7 +37,7 @@
           <div class:block={!$tileView} in:fade>
             <progress class="progress is-info" max="100">0%</progress>
           </div>
-        {:else if initialOffersGotLoaded}
+        {:else if $initialOffersGotLoaded}
           <div class="notification is-info">
             Zu deiner Suche wurden keine Angebote gefunden. Bitte passe die Filter an.
           </div>
