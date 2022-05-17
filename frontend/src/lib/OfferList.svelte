@@ -29,7 +29,7 @@
 
     <div class:grid--active={$tileView}>
       {#each $offers as offer (offer.id)}
-        <div class:block={!$tileView} transition:blur={{ duration: 200, amount: 20 }}>
+        <div class:block={!$tileView} in:blur={{ duration: 200, amount: 20 }}>
           <OfferCard {offer} />
         </div>
       {:else}
