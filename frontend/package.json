@@ -17,7 +17,7 @@
     "@sveltejs/adapter-static": "^1.0.0-next.31",
     "@sveltejs/kit": "next",
     "@types/cookie": "^0.4.1",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^8.12.0",
@@ -37,6 +37,6 @@
     "@fontsource/fira-mono": "^4.5.0",
     "bulma": "^0.9.4",
     "cookie": "^0.4.1",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   }
 }

@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { browser } from '$app/env';
-  import { debounce } from 'lodash';
+  import { debounce } from 'lodash-es';
   import {
     offers,
     filterCategory,
