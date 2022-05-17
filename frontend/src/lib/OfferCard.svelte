@@ -1,8 +1,8 @@
 <script lang="ts">
   import { tileView } from './store';
-  import type { Offer } from './offers';
+  import type { OfferPreview } from './offers';
 
-  export let offer: Offer;
+  export let offer: OfferPreview;
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 </script>

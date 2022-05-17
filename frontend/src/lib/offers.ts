@@ -1,7 +1,27 @@
 import { get } from 'svelte/store';
 import { filterCategory, filterSearchString, isLoading, itemsPerPage } from './store';
 
-export async function getOffers(offset: number) {
+type PriceType = 'VB' | 'Fixed' | 'OnRequest' | 'HighestBid';
+type SellerType = 'private' | 'commercial';
+
+export interface OfferPreview {
+  id: number;
+  title: string;
+  subtitle: string;
+  thumbnailUrl: string;
+  price?: number;
+  priceType?: PriceType;
+  url: string;
+  shortDescription: string;
+  sellerType: SellerType;
+  sellerAddress?: {
+    country?: string;
+    city?: string;
+  };
+  postedDate: Date;
+}
+
+export async function getOffers(offset: number): Promise<OfferPreview[]> {
   isLoading.set(true);
   const receivedOffers = await fetch(
     `${import.meta.env.VITE_API_BASE}/offers?search=${get(
@@ -19,24 +39,4 @@ export async function getOffers(offset: number) {
         : offer.thumbnailUrl.replace('/thumbnail/', '/')
     };
   });
-}
-
-type PriceType = 'VB' | 'Fixed' | 'OnRequest' | 'HighestBid';
-type SellerType = 'private' | 'commercial';
-
-export interface Offer {
-  id: number;
-  title: string;
-  subtitle: string;
-  thumbnailUrl: string;
-  price?: number;
-  priceType?: PriceType;
-  url: string;
-  shortDescription: string;
-  sellerType: SellerType;
-  sellerAddress?: {
-    country?: string;
-    city?: string;
-  };
-  postedDate: Date;
 }

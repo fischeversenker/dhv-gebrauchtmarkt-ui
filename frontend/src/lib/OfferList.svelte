@@ -1,14 +1,19 @@
 <script lang="ts">
   import { fade, blur } from 'svelte/transition';
   import { browser } from '$app/env';
-  import { offers, isLoadingMore, tileView, isLoading, TILE_VIEW_STORAGE_KEY } from './store';
+  import {
+    offers,
+    isLoadingMore,
+    tileView,
+    isLoading,
+    TILE_VIEW_STORAGE_KEY,
+    initialOffersGotLoaded
+  } from './store';
   import OfferCard from './OfferCard.svelte';
 
   function toggleTileView() {
     tileView.update((currentValue) => {
-      if (browser) {
-        localStorage.setItem(TILE_VIEW_STORAGE_KEY, String(!currentValue));
-      }
+      if (browser) localStorage.setItem(TILE_VIEW_STORAGE_KEY, String(!currentValue));
       return !currentValue;
     });
   }
@@ -21,6 +26,7 @@
         <i class="fa-solid" class:fa-grip-vertical={!$tileView} class:fa-grip-lines={$tileView} />
       </button>
     </div>
+
     <div class:grid--active={$tileView}>
       {#each $offers as offer (offer.id)}
         <div class:block={!$tileView} transition:blur={{ duration: 400, amount: 20 }}>
@@ -31,12 +37,13 @@
           <div class:block={!$tileView} in:fade>
             <progress class="progress is-info" max="100">0%</progress>
           </div>
-        {:else}
+        {:else if initialOffersGotLoaded}
           <div class="notification is-info">
             Zu deiner Suche wurden keine Angebote gefunden. Bitte passe die Filter an.
           </div>
         {/if}
       {/each}
+
       {#if $isLoadingMore}
         <div class:block={!$tileView} in:fade>
           <progress class="progress is-info" max="100">0%</progress>

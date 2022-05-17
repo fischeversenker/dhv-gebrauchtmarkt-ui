@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { browser } from '$app/env';
   import { debounce } from 'lodash';
@@ -8,7 +8,8 @@
     filterCategory,
     initialOffersGotLoaded,
     offersOffset,
-    filterSearchString
+    filterSearchString,
+    subscribeButSkipFirst
   } from '$lib/store';
   import { getOffers } from '$lib/offers';
   import FilterBar from '$lib/FilterBar.svelte';
@@ -18,28 +19,25 @@
   let unsubscribeSelectedCategory: Unsubscriber;
   let unsubscribeFilterSearchString: Unsubscriber;
 
-  if (browser) {
-    unsubscribeSelectedCategory = filterCategory.subscribe(async () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  unsubscribeSelectedCategory = subscribeButSkipFirst(filterCategory, async () => {
+    if (browser) window.scrollTo({ top: 0, behavior: 'smooth' });
+    $offersOffset = 0;
+    $offers = await getOffers($offersOffset);
+  });
+
+  unsubscribeFilterSearchString = subscribeButSkipFirst(
+    filterSearchString,
+    debounce(async () => {
+      if (browser) window.scrollTo({ top: 0, behavior: 'smooth' });
       $offersOffset = 0;
-      offers.set(await getOffers($offersOffset));
-      initialOffersGotLoaded.set(true);
-    });
+      $offers = await getOffers($offersOffset);
+    }, 500)
+  );
 
-    let initialSearchStringFired = false;
-    unsubscribeFilterSearchString = filterSearchString.subscribe(
-      debounce(async () => {
-        if (!initialSearchStringFired) {
-          initialSearchStringFired = true;
-          return;
-        }
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        $offersOffset = 0;
-        offers.set(await getOffers($offersOffset));
-      }, 500)
-    );
-  }
+  onMount(async () => {
+    $offers = await getOffers($offersOffset);
+    $initialOffersGotLoaded = true;
+  });
 
   onDestroy(() => {
     unsubscribeSelectedCategory?.();
@@ -53,8 +51,10 @@
   <title>Home</title>
 </svelte:head>
 
-<OfferList />
+<template>
+  <OfferList />
 
-<InifinityLoadingFooter />
+  <InifinityLoadingFooter />
 
-<FilterBar />
+  <FilterBar />
+</template>
