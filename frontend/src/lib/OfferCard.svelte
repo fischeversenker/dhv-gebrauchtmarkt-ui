@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { tileView } from './store';
   import type { OfferPreview } from './offers';
 
   export let offer: OfferPreview;
@@ -9,17 +8,17 @@
 
 <template>
   <a href={offer.url} target="_blank">
-    <div class="card" class:card--compact={$tileView}>
+    <div class="card">
       <div class="card-image">
-        <figure class="image" class:is-1by1={$tileView}>
+        <figure class="image">
           <img src={offer.thumbnailUrl} alt={offer.title} />
         </figure>
       </div>
 
       <div class="card-content">
-        <p class="title" class:is-4={!$tileView} class:is-5={$tileView}>{offer.title}</p>
+        <p class="title is-4">{offer.title}</p>
         {#if offer.subtitle}
-          <p class="subtitle has-text-grey" class:is-6={!$tileView} class:is-7={$tileView}>
+          <p class="subtitle has-text-grey is-6">
             {offer.subtitle}
           </p>
         {/if}
@@ -55,24 +54,7 @@
     object-fit: cover;
   }
 
-  .card--compact .card-content {
-    padding: 1rem 0.5rem;
-  }
-
   .card .content {
     word-break: break-word;
-  }
-
-  .card--compact .content {
-    position: relative;
-    height: 9rem;
-    overflow: hidden;
-  }
-
-  .card--compact .content::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(to bottom, transparent 85%, white);
   }
 </style>
