@@ -2,6 +2,7 @@
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { browser } from '$app/env';
+  import { beforeNavigate, afterNavigate } from '$app/navigation';
   import { debounce } from 'lodash-es';
   import {
     offers,
@@ -9,7 +10,8 @@
     initialOffersGotLoaded,
     offersOffset,
     filterSearchString,
-    subscribeButSkipFirst
+    subscribeButSkipFirst,
+    indexScrollTop
   } from '$lib/store';
   import { getOffers } from '$lib/offers';
   import FilterBar from '$lib/FilterBar.svelte';
@@ -34,7 +36,16 @@
     }, 500)
   );
 
+  beforeNavigate(() => {
+    $indexScrollTop = window.scrollY;
+  });
+
+  afterNavigate(() => {
+    window.scrollTo({ top: $indexScrollTop });
+  });
+
   onMount(async () => {
+    if ($initialOffersGotLoaded) return;
     $offers = await getOffers($offersOffset);
     $initialOffersGotLoaded = true;
   });
@@ -43,8 +54,6 @@
     unsubscribeSelectedCategory?.();
     unsubscribeFilterSearchString?.();
   });
-
-  export const prerender = true;
 </script>
 
 <svelte:head>
