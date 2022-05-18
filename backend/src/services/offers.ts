@@ -3,15 +3,13 @@ import { DOMParser, Element } from 'https://deno.land/x/deno_dom@v0.1.22-alpha/d
 type PriceType = 'VB' | 'Fixpreis' | 'Auf Anfrage' | 'Höchstgebot';
 type SellerType = 'private' | 'commercial';
 
-interface Offer {
+interface CommonOfferProperties {
   id: number;
+  url: string;
   title: string;
   subtitle?: string;
-  thumbnailUrl: string;
   price?: number;
   priceType?: PriceType;
-  url: string;
-  shortDescription: string;
   sellerType: SellerType;
   sellerAddress?: {
     country?: string;
@@ -20,38 +18,44 @@ interface Offer {
   postedDate: Date;
 }
 
-export function collectOffers(rawHtml: string): unknown[] {
+interface OfferPreview extends CommonOfferProperties {
+  thumbnailUrl: string;
+  shortDescription: string;
+}
+
+interface MusterData {
+  databaseUrl?: string;
+  norm?: string;
+  certifier?: string;
+  classification?: string;
+  takeoffWeight?: {
+    from?: number;
+    to?: number;
+  };
+}
+
+interface Offer extends CommonOfferProperties {
+  description: string;
+  imageUrls: string[];
+  musterData?: MusterData;
+}
+
+export function collectOfferPreviews(rawHtml: string): OfferPreview[] {
   const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
   if (!doc) {
     throw new Error('couldn\'t parse HTML');
   }
 
-  const offerElements = doc.querySelectorAll('.gm_offer');
-  const offers: Offer[] = Array.from(offerElements).map((offerElementNode) => {
-    const offerElement = offerElementNode as Element;
-    return offerFromOfferElement(offerElement);
+  const offerPreviewElements = doc.querySelectorAll('.gm_offer');
+  const offerPreviews: OfferPreview[] = Array.from(offerPreviewElements).map((offerPreviewElementNode) => {
+    return offerPreviewFromOfferElement(offerPreviewElementNode as Element);
   });
-  return offers;
+  return offerPreviews;
 }
 
-function offerFromOfferElement(offerElement: Element): Offer {
-  const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!;
-  const descriptionElement = offerElement.querySelector('.gm_offer_description');
-  const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.replace('<br />', '\n').replace(
-    '<br>',
-    '\n',
-  ).trim()!;
-
-  const rawTitle = descriptionElement?.querySelector('h2')?.textContent!;
-  let title = rawTitle;
-  let subtitle = undefined;
-  if (rawTitle.includes('|')) {
-    title = title.split('|')[0].trim();
-    subtitle = rawTitle.split('|')[1].trim();
-  }
-  const url = offerElement.querySelector('.gm_offer_btn')?.getAttribute('href')!;
-  const id = Number(url.match(/\/id\/(\d+)/)![1]);
-
+function commonOfferPropertiesFromOfferElement(
+  offerElement: Element,
+): Omit<CommonOfferProperties, 'title' | 'subtitle' | 'id' | 'url'> {
   const sellerElement = offerElement.querySelector('.gm_seller');
   const sellerType = sellerElement?.classList.contains('private') ? 'private' : 'commercial';
   const sellerTopElement = sellerElement?.querySelector('.top')!;
@@ -86,16 +90,118 @@ function offerFromOfferElement(offerElement: Element): Offer {
   }
 
   return {
+    price,
+    priceType,
+    sellerType,
+    sellerAddress,
+    postedDate,
+  };
+}
+
+function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
+  const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!;
+  const descriptionElement = offerElement.querySelector('.gm_offer_description');
+  const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.replace('<br />', '\n').replace(
+    '<br>',
+    '\n',
+  ).trim()!;
+
+  const rawTitle = descriptionElement?.querySelector('h2')?.textContent!;
+  let title = rawTitle;
+  let subtitle = undefined;
+  if (rawTitle.includes('|')) {
+    title = title.split('|')[0].trim();
+    subtitle = rawTitle.split('|')[1].trim();
+  }
+  const url = offerElement.querySelector('.gm_offer_btn')?.getAttribute('href')!;
+  const id = Number(url.match(/\/id\/(\d+)/)![1]);
+
+  const commonOfferProperties = commonOfferPropertiesFromOfferElement(offerElement);
+
+  return {
+    ...commonOfferProperties,
     id,
     title,
     subtitle,
     thumbnailUrl,
     shortDescription,
-    price,
-    priceType,
-    sellerType,
-    sellerAddress,
     url: `https://www.dhv.de${url}`,
-    postedDate,
+  };
+}
+
+export function collectOffer(rawHtml: string, id: string): Offer {
+  const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
+  if (!doc) {
+    throw new Error('couldn\'t parse HTML');
+  }
+
+  const offerElement = doc.querySelector(`#gm_offer_id_${id}`);
+  if (!offerElement) {
+    throw new Error('couldn\'t find offer element');
+  }
+
+  const commonOfferProperties = commonOfferPropertiesFromOfferElement(offerElement as Element);
+
+  const descriptionElement = offerElement.querySelector('.gm_offer_bodytext');
+  const description = descriptionElement?.innerHTML.replace('<br />', '\n').replace(
+    '<br>',
+    '\n',
+  ).trim()!;
+
+  const rawTitle = offerElement.querySelector('h1')?.textContent!;
+  let title = rawTitle;
+  let subtitle = undefined;
+  if (rawTitle.includes('|')) {
+    title = title.split('|')[0].trim();
+    subtitle = rawTitle.split('|')[1].trim();
+  }
+
+  const imagesContainer = offerElement.querySelector('.gm_offer_image');
+  const imageLinkNodes = imagesContainer?.querySelectorAll('.gm_lightbox');
+  let imageUrls: string[] = [];
+  if (imageLinkNodes) {
+    imageUrls = Array.from(imageLinkNodes).map((imageLink) => (imageLink as Element).getAttribute('href')!);
+  }
+
+  const musterDataElement = offerElement.querySelector('.gm_offer_musterdaten');
+  let musterData: MusterData | undefined = undefined;
+  if (musterDataElement) {
+    const rawDatabaseUrl = musterDataElement?.querySelector('.gm_offer_musterlink > a')?.getAttribute('href')!;
+    const rawNormDataStrongElements = musterDataElement?.querySelectorAll('div > strong');
+    const rawNormDataElements = Array.from(rawNormDataStrongElements).map((rawNormDataStrongElement) => {
+      const label = rawNormDataStrongElement.textContent.trim();
+      const parentElement = (rawNormDataStrongElement as Element).parentElement!;
+      parentElement?.removeChild(rawNormDataStrongElement);
+      const value = parentElement.textContent.trim();
+      return { label, value };
+    });
+
+    const norm = rawNormDataElements.find((rawNormDataElement) => rawNormDataElement.label === 'Norm:');
+    const certifier = rawNormDataElements.find((rawNormDataElement) => rawNormDataElement.label === 'Prüfstelle:');
+    const classification = rawNormDataElements.find((rawNormDataElement) =>
+      rawNormDataElement.label === 'Klassifizierung:'
+    );
+
+    musterData = {
+      databaseUrl: `https://dhv.de${rawDatabaseUrl}`,
+      certifier: certifier?.value,
+      classification: classification?.value,
+      norm: norm?.value,
+      // takeoffWeight: {
+      //   from: 70,
+      //   to: 90
+      // }
+    };
+  }
+
+  return {
+    ...commonOfferProperties,
+    id: Number(id),
+    title,
+    subtitle,
+    imageUrls,
+    description,
+    musterData,
+    url: `https://www.dhv.de/db3/gebrauchtmarkt/anzeige/id/${id}`,
   };
 }
