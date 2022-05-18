@@ -8,7 +8,7 @@
 </script>
 
 <template>
-  <a href={`offer/${offer.id}`} sveltekit:noscroll>
+  <a href={`offers/${offer.id}`} sveltekit:noscroll>
     <div class="card" class:card--compact={$tileView}>
       <div class="card-image">
         <figure class="image" class:is-1by1={$tileView}>

@@ -4,15 +4,13 @@ import { filterCategory, filterSearchString, isLoading, itemsPerPage, offers } f
 type PriceType = 'VB' | 'Fixed' | 'OnRequest' | 'HighestBid';
 type SellerType = 'private' | 'commercial';
 
-export interface OfferPreview {
+interface CommonOfferProperties {
   id: number;
+  url: string;
   title: string;
-  subtitle: string;
-  thumbnailUrl: string;
+  subtitle?: string;
   price?: number;
   priceType?: PriceType;
-  url: string;
-  shortDescription: string;
   sellerType: SellerType;
   sellerAddress?: {
     country?: string;
@@ -21,8 +19,26 @@ export interface OfferPreview {
   postedDate: Date;
 }
 
-export interface Offer extends OfferPreview {
+export interface OfferPreview extends CommonOfferProperties {
+  thumbnailUrl: string;
+  shortDescription: string;
+}
+
+interface MusterData {
+  databaseUrl?: string;
+  norm?: string;
+  certifier?: string;
+  classification?: string;
+  takeoffWeight?: {
+    from?: number;
+    to?: number;
+  }
+}
+
+export interface Offer extends CommonOfferProperties {
   description: string;
+  imageUrls: string[];
+  musterData?: MusterData;
 }
 
 export async function getOffers(offset: number): Promise<OfferPreview[]> {
@@ -34,7 +50,7 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
   ).then((res) => res.json());
   isLoading.set(false);
 
-  return receivedOffers.map((offer: Offer) => {
+  return receivedOffers.map((offer: OfferPreview) => {
     return {
       ...offer,
       postedDate: new Date(offer.postedDate),
@@ -46,14 +62,16 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
 }
 
 export async function getOffer(id: number): Promise<Offer> {
-  const offer = get(offers).find((offer) => offer.id === id);
-  // const offer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`).then((res) => res.json()) as Offer;
+  const offer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`).then((res) => res.json()) as Offer;
   if (!offer) {
     throw new Error(`Wasn't able to find offer with ID ${id}`);
   }
 
   return {
     ...offer,
-    description: 'my description'
+    postedDate: new Date(offer.postedDate),
+    imageUrls: offer.imageUrls.length > 0
+      ? offer.imageUrls
+      : ['/images/gm_dummy.png']
   };
 }

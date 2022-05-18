@@ -1,51 +1,51 @@
 <script lang="ts">
-  import type { OfferPreview } from './offers';
+  import type { Offer } from './offers';
 
-  export let offer: OfferPreview;
+  export let offer: Offer;
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 </script>
 
 <template>
-  <a href={offer.url} target="_blank">
-    <div class="card">
-      <div class="card-image">
-        <figure class="image">
-          <img src={offer.thumbnailUrl} alt={offer.title} />
-        </figure>
-      </div>
-
-      <div class="card-content">
-        <p class="title is-4">{offer.title}</p>
-        {#if offer.subtitle}
-          <p class="subtitle has-text-grey is-6">
-            {offer.subtitle}
-          </p>
-        {/if}
-
-        <div class="content">
-          {offer.shortDescription}
-        </div>
-
-        <div class="tags">
-          <span class="tag is-info">{offerPostedDate}</span>
-          {#if offer.sellerAddress}
-            <span class="tag is-info">{offer.sellerAddress.city}</span>
-            {#if offer.sellerAddress.country !== 'Deutschland'}
-              <span class="tag is-info">{offer.sellerAddress.country}</span>
-            {/if}
-          {/if}
-        </div>
-
-        {#if offer.price || offer.priceType}
-          <p class="title is-5">
-            {#if offer.price}<strong>{offer.price} €</strong>{/if}
-            {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
-          </p>
-        {/if}
-      </div>
+  <div class="card">
+    <div class="card-image">
+      <figure class="image">
+        <img src={offer.imageUrls[0]} alt={offer.title} />
+      </figure>
     </div>
-  </a>
+
+    <div class="card-content">
+      <p class="title is-4">{offer.title}</p>
+      {#if offer.subtitle}
+        <p class="subtitle has-text-grey is-6">
+          {offer.subtitle}
+        </p>
+      {/if}
+
+      <div class="content">
+        {offer.description}
+      </div>
+
+      <div class="tags">
+        <span class="tag is-info">{offerPostedDate}</span>
+        {#if offer.sellerAddress}
+          <span class="tag is-info">{offer.sellerAddress.city}</span>
+          {#if offer.sellerAddress.country !== 'Deutschland'}
+            <span class="tag is-info">{offer.sellerAddress.country}</span>
+          {/if}
+        {/if}
+      </div>
+
+      {#if offer.price || offer.priceType}
+        <p class="title is-5">
+          {#if offer.price}<strong>{offer.price} €</strong>{/if}
+          {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
+        </p>
+      {/if}
+
+      <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank">Im DHV-Gebrauchtmarkt anzeigen</a>
+    </div>
+  </div>
 </template>
 
 <style>
