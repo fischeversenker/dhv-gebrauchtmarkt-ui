@@ -1,5 +1,4 @@
-import { Application } from 'https://deno.land/x/oak@v10.5.1/mod.ts';
-import { oakCors } from 'https://deno.land/x/cors@v1.2.0/mod.ts';
+import { Application, oakCors } from './deps.ts';
 import { router } from './routes.ts';
 
 const app = new Application();

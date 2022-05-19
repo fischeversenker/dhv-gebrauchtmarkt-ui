@@ -1,4 +1,4 @@
-import { Router } from 'https://deno.land/x/oak@v10.5.1/mod.ts';
+import { Router } from '../deps.ts';
 import { request } from '../services/request.ts';
 import { collectOffer, collectOfferPreviews } from '../services/offers.ts';
 

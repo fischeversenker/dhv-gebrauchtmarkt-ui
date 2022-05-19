@@ -1,4 +1,4 @@
-import { DOMParser, Element } from 'https://deno.land/x/deno_dom@v0.1.22-alpha/deno-dom-wasm.ts';
+import { DOMParser, Element } from '../deps.ts';
 
 type PriceType = 'VB' | 'Fixpreis' | 'Auf Anfrage' | 'Höchstgebot';
 type SellerType = 'private' | 'commercial';
