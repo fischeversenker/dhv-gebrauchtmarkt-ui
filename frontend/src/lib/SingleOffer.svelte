@@ -127,7 +127,6 @@
           <div>Bild {$imageIndex + 1} von {offer.imageUrls.length}</div>
         </footer>
       </div>
-      <button class="modal-close is-large" aria-label="close" on:click={() => $showImageModal = false}></button>
     </div>
   {/if}
 
