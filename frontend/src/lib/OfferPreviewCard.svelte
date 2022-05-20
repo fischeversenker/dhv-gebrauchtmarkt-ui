@@ -75,4 +75,10 @@
     inset: 0;
     background-image: linear-gradient(to bottom, transparent 85%, white);
   }
+
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 </style>
