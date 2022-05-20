@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from '$app/env';
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { getOffers } from './offers';
@@ -7,6 +6,7 @@
     initialOffersGotLoaded,
     isLoadingMore,
     itemsPerPage,
+    notification,
     offers,
     offersOffset
   } from './store';
@@ -23,11 +23,21 @@
     $isLoadingMore = true;
     lastTrigger = Date.now();
     getOffers($offersOffset).then((moreOffers) => {
-      // remove existing offers
-      // TODO: show toast "new offers available" if there are new offers
+      let hasNewOffers = false;
       const newOffers = moreOffers.filter(
-        (offer) => !$offers.some((o) => o.id === offer.id)
-      );
+        (offer) => {
+          const isDuplicate = $offers.some((o) => o.id === offer.id)
+          hasNewOffers = hasNewOffers || isDuplicate;
+          return !isDuplicate;
+      });
+      if (hasNewOffers) {
+        $notification = {
+          message: 'Es gibt neue Angebote. Tippe hier um die Seite neu zu laden.',
+          type: 'success',
+          callback: () => location.reload(),
+          duration: 5000
+        };
+      }
       offers.update((offers) => offers.concat(newOffers));
       $isLoadingMore = false;
     });

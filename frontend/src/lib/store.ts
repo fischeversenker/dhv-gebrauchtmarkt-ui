@@ -16,7 +16,7 @@ export const itemsPerPage = writable(6);
 
 export const indexScrollTop = writable(0);
 
-export const notification = writable<{ type: 'success' | 'error', message: string, duration?: number } | null>(null);
+export const notification = writable<{ type: 'success' | 'error', message: string, duration?: number, callback?: () => void } | null>(null);
 
 export const TILE_VIEW_STORAGE_KEY = 'tileView';
 const localStorageTileView = (browser && localStorage.getItem(TILE_VIEW_STORAGE_KEY)) || false;
@@ -25,7 +25,7 @@ export const tileView = writable<boolean>(
 );
 
 export const FIRST_TIME_VISITOR_STORAGE_KEY = 'firstTimeVisitor';
-const localStorageFirstTimeVisitor = (browser && localStorage.getItem('firstTimeVisitor')) || null;
+const localStorageFirstTimeVisitor = (browser && localStorage.getItem(FIRST_TIME_VISITOR_STORAGE_KEY)) || null;
 export const firstTimeVisitor = writable<boolean>(localStorageFirstTimeVisitor === null);
 
 export function subscribeButSkipFirst<T>(

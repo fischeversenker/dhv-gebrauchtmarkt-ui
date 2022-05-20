@@ -11,6 +11,11 @@
     }, currentNotification.duration || 5000);
   });
 
+  function onNotificationClicked() {
+    if ($notification?.callback) $notification.callback();
+    $notification = null;
+  }
+
   onDestroy(() => {
     unsubscribeNotification();
   });
@@ -18,7 +23,7 @@
 
 <template>
   {#if $notification !== null}
-    <div class="box" transition:fly={{ y: 400 }} on:click={() => $notification = null}>
+    <div class="box" transition:fly={{ y: 400 }} on:click={onNotificationClicked}>
       <div class="notification" class:is-success={$notification.type === 'success'} class:is-danger={$notification.type === 'error'}>
         <button class="delete"></button>
         {$notification.message}
