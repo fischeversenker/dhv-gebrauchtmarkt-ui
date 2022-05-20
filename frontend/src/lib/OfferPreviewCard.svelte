@@ -31,8 +31,10 @@
         <div class="tags">
           <span class="tag is-info">{offerPostedDate}</span>
           {#if offer.sellerAddress}
-            <span class="tag is-info">{offer.sellerAddress.city}</span>
-            {#if offer.sellerAddress.country !== 'Deutschland'}
+            {#if offer.sellerAddress.city}
+              <span class="tag is-info">{offer.sellerAddress.city}</span>
+            {/if}
+            {#if offer.sellerAddress.country && offer.sellerAddress.country !== 'Deutschland'}
               <span class="tag is-info">{offer.sellerAddress.country}</span>
             {/if}
           {/if}

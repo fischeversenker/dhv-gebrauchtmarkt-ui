@@ -61,8 +61,8 @@ function commonOfferPropertiesFromOfferElement(
   const sellerTopElement = sellerElement?.querySelector('.top')!;
   sellerElement?.removeChild(sellerTopElement);
   const sellerAddressElements = sellerElement?.querySelectorAll('li');
-  const sellerCountry = sellerAddressElements?.[0]?.textContent.replace('Land: ', '').trim();
-  const sellerCity = sellerAddressElements?.[1]?.textContent.replace('Ort: ', '').trim();
+  const sellerCountry = sellerAddressElements?.[0]?.textContent.replace(/Land:? /, '').trim();
+  const sellerCity = sellerAddressElements?.[1]?.textContent.replace(/Ort:? /, '').trim();
   const postedDateString = sellerAddressElements?.[2]?.textContent.replace('Online seit: ', '')!;
   const postedDateParts = postedDateString.split('.').map((part) => Number(part.trim()));
   const postedDate = new Date(postedDateParts[2], postedDateParts[1] - 1, postedDateParts[0]);
@@ -101,10 +101,7 @@ function commonOfferPropertiesFromOfferElement(
 function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
   const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!;
   const descriptionElement = offerElement.querySelector('.gm_offer_description');
-  const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.replace('<br />', '\n').replace(
-    '<br>',
-    '\n',
-  ).trim()!;
+  const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.trim()!;
 
   const rawTitle = descriptionElement?.querySelector('h2')?.textContent!;
   let title = rawTitle;
@@ -143,10 +140,7 @@ export function collectOffer(rawHtml: string, id: string): Offer {
   const commonOfferProperties = commonOfferPropertiesFromOfferElement(offerElement as Element);
 
   const descriptionElement = offerElement.querySelector('.gm_offer_bodytext');
-  const description = descriptionElement?.innerHTML.replace('<br />', '\n').replace(
-    '<br>',
-    '\n',
-  ).trim()!;
+  const description = descriptionElement?.innerHTML.trim()!;
 
   const rawTitle = offerElement.querySelector('h1')?.textContent!;
   let title = rawTitle;
