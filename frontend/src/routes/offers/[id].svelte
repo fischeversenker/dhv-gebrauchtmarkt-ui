@@ -25,19 +25,14 @@
 
 <template>
   <section class="section">
-    <nav class="breadcrumb" aria-label="breadcrumbs">
-      <ul>
-        <li>
-          <a href="/">
-            <span class="icon is-small">
-              <i class="fas fa-home" aria-hidden="true" />
-            </span>
-            <span>Home</span>
-          </a>
-        </li>
-        <li class="is-active"><a href="./" aria-current="page">{offer?.title}</a></li>
-      </ul>
-    </nav>
+    <div class="block">
+      <a href="/">
+        <span class="icon is-small">
+          <i class="fa-solid fa-left-long" aria-hidden="true" />
+        </span>
+        <span>Zurück</span>
+      </a>
+    </div>
 
     {#if offer}
       <OfferCard {offer} />
