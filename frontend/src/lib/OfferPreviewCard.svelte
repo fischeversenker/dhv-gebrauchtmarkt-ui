@@ -25,7 +25,7 @@
         {/if}
 
         <div class="content">
-          {offer.shortDescription}
+          {@html offer.shortDescription}
         </div>
 
         <div class="tags">

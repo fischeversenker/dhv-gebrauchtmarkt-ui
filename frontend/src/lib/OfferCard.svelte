@@ -23,7 +23,7 @@
       {/if}
 
       <div class="content">
-        {offer.description}
+        {@html offer.description}
       </div>
 
       <div class="tags">
