@@ -62,6 +62,9 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
 }
 
 export async function getOffer(id: number): Promise<Offer> {
+  if (!id || Number.isNaN(id)) {
+    throw new Error(`Invalid offer id: ${id}`);
+  }
   const offer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`).then((res) => res.json()) as Offer;
   if (!offer) {
     throw new Error(`Wasn't able to find offer with ID ${id}`);
