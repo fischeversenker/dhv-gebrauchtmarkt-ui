@@ -16,6 +16,8 @@ export const itemsPerPage = writable(6);
 
 export const indexScrollTop = writable(0);
 
+export const notification = writable<{ type: 'success' | 'error', message: string, duration?: number } | null>(null);
+
 export const TILE_VIEW_STORAGE_KEY = 'tileView';
 const localStorageTileView = (browser && localStorage.getItem(TILE_VIEW_STORAGE_KEY)) || false;
 export const tileView = writable<boolean>(

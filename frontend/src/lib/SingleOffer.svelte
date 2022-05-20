@@ -1,12 +1,16 @@
 <script lang="ts">
   import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
-  import type { Offer } from './offers';
+  import { contactOffer, type ContactFormResult, type Offer } from './offers';
+  import ContactForm from './ContactForm.svelte';
+import { notification } from './store';
 
   export let offer: Offer;
 
   let showImageModal = writable(false);
   let imageIndex = writable(0);
+
+  let showContactForm = writable(false);
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 
@@ -22,6 +26,24 @@
   function onThumbnailClicked(index: number) {
     $imageIndex = index;
     $showImageModal = true;
+  }
+
+  async function onContactFormSubmitted(event: CustomEvent<ContactFormResult>) {
+    const result = await contactOffer({
+      offerId: offer.id,
+      name: event.detail.name,
+      email: event.detail.email,
+      phone: event.detail.phone,
+      message: event.detail.message,
+      sendToMe: event.detail.sendToMe,
+    });
+
+    $showContactForm = false;
+
+    $notification = {
+      type: result.success ? 'success' : 'error',
+      message: result.message,
+    };
   }
 </script>
 
@@ -83,6 +105,7 @@
   </div>
 
   <div class="block">
+    <div class="button is-primary is-fullwidth mb-4" on:click={() => $showContactForm = true}>Anbieter kontaktieren</div>
     <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank">Im DHV-Gebrauchtmarkt anzeigen</a>
   </div>
 
@@ -104,7 +127,20 @@
           <div>Bild {$imageIndex + 1} von {offer.imageUrls.length}</div>
         </footer>
       </div>
+      <button class="modal-close is-large" aria-label="close" on:click={() => $showImageModal = false}></button>
     </div>
+  {/if}
+
+  {#if $showContactForm}
+  <div class="modal is-active" transition:fade={{ duration: 100 }}>
+    <div class="modal-background" on:click={() => $showContactForm = false}></div>
+    <div class="modal-content">
+      <div class="box">
+        <ContactForm on:submit={(event) => onContactFormSubmitted(event)} on:cancel={() => $showContactForm = false} />
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" on:click={() => $showContactForm = false}></button>
+  </div>
   {/if}
 </template>
 

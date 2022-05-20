@@ -1,8 +1,8 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { onDestroy, onMount } from 'svelte';
-  import { getOffer, type Offer } from '../../lib/offers';
-  import SingleOffer from '../../lib/SingleOffer.svelte';
+  import { getOffer, type Offer } from '$lib/offers';
+  import SingleOffer from '$lib/SingleOffer.svelte';
 
   let offer: Offer | undefined;
   const unsubscribePage = page.subscribe(async (value) => {

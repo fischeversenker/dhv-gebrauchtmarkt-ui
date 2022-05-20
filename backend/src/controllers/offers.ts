@@ -33,4 +33,41 @@ export const offersRouter = new Router()
     const offerRawHtml = offerResponse.content;
     const offer = collectOffer(offerRawHtml, id);
     context.response.body = offer;
+  })
+  .post('/:id/contact', async (context) => {
+    const id = context.params.id;
+    const body = context.request.body();
+    if (body.type !== 'json') {
+      throw new Error('Expected form-data');
+    }
+
+    const requestFormData = await body.value;
+    const { message, name, email, phone, sendToMe } = requestFormData;
+
+    const formData = new FormData();
+    formData.append('Nachricht', message);
+    formData.append('Name', name);
+    formData.append('Email', email);
+    formData.append('Telefon', phone);
+    formData.append('id', id);
+    formData.append('sendToSender', sendToMe ? '1' : '0');
+    formData.append('agbAccepted', '1');
+    formData.append('formid', 'anbieter_kontakt');
+
+    const contactResponse = await request('https://www.dhv.de/db3/service/gebrauchtmarkt/anbieterkontaktieren', {
+      method: 'POST',
+      body: formData,
+    }).then(
+      (response) => response.json(),
+    );
+
+    if (contactResponse.success === true && contactResponse.message) {
+      context.response.body = contactResponse;
+    } else {
+      context.response.status = 400;
+      context.response.body = {
+        success: false,
+        message: 'Da ist etwas schief gelaufen. Bitte versuche es erneut.',
+      };
+    }
   });

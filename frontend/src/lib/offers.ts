@@ -42,6 +42,18 @@ export interface Offer extends CommonOfferProperties {
   musterData?: MusterData;
 }
 
+export interface ContactFormResult {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  sendToMe: boolean;
+}
+
+interface OfferContactData extends ContactFormResult {
+  offerId: number;
+}
+
 export async function getOffers(offset: number): Promise<OfferPreview[]> {
   isLoading.set(true);
   const receivedOffers = await fetch(
@@ -57,7 +69,7 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
       postedDate: new Date(offer.postedDate),
       thumbnailUrl: offer.thumbnailUrl.includes('_dummy.png')
         ? '/images/gm_dummy.png'
-        : offer.thumbnailUrl.replace('/thumbnail/', '/')
+        : offer.thumbnailUrl
     };
   });
 }
@@ -81,4 +93,15 @@ export async function getOffer(id: number): Promise<Offer> {
       ? offer.imageUrls
       : ['/images/gm_dummy.png']
   };
+}
+
+export async function contactOffer(data: OfferContactData): Promise<{ success: boolean, message: string }> {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${data.offerId}/contact`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return res.json();
 }
