@@ -36,6 +36,7 @@ interface MusterData {
 
 interface Offer extends CommonOfferProperties {
   description: string;
+  thumbnailUrls: string[];
   imageUrls: string[];
   musterData?: MusterData;
 }
@@ -152,9 +153,13 @@ export function collectOffer(rawHtml: string, id: string): Offer {
 
   const imagesContainer = offerElement.querySelector('.gm_offer_image');
   const imageLinkNodes = imagesContainer?.querySelectorAll('.gm_lightbox');
+  let thumbnailUrls: string[] = [];
   let imageUrls: string[] = [];
   if (imageLinkNodes) {
     imageUrls = Array.from(imageLinkNodes).map((imageLink) => (imageLink as Element).getAttribute('href')!);
+    thumbnailUrls = Array.from(imageLinkNodes).map((imageLink) =>
+      (imageLink as Element).querySelector('img')!.getAttribute('src')!
+    );
   }
 
   const musterDataElement = offerElement.querySelector('.gm_offer_musterdaten');
@@ -193,6 +198,7 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     id: Number(id),
     title,
     subtitle,
+    thumbnailUrls,
     imageUrls,
     description,
     musterData,

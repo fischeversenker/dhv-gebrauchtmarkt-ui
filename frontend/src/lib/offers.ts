@@ -37,6 +37,7 @@ interface MusterData {
 
 export interface Offer extends CommonOfferProperties {
   description: string;
+  thumbnailUrls: string[];
   imageUrls: string[];
   musterData?: MusterData;
 }
@@ -73,6 +74,9 @@ export async function getOffer(id: number): Promise<Offer> {
   return {
     ...offer,
     postedDate: new Date(offer.postedDate),
+    thumbnailUrls: offer.thumbnailUrls.length > 0
+      ? offer.thumbnailUrls
+      : ['/images/gm_dummy.png'],
     imageUrls: offer.imageUrls.length > 0
       ? offer.imageUrls
       : ['/images/gm_dummy.png']
