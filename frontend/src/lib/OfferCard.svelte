@@ -10,7 +10,7 @@
   <div class="card">
     <div class="card-image">
       <figure class="image">
-        <img src={offer.imageUrls[0]} alt={offer.title} />
+        <img src={offer.thumbnailUrls[0]} alt={offer.title} />
       </figure>
     </div>
 
@@ -33,7 +33,7 @@
             <span class="tag is-info">{offer.sellerAddress.city}</span>
           {/if}
           {#if offer.sellerAddress.country && offer.sellerAddress.country !== 'Deutschland'}
-            <span class="tag is-info">{offer.sellerAddress.country}</span>
+            <span class="tag is-warning">{offer.sellerAddress.country}</span>
           {/if}
         {/if}
       </div>

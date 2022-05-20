@@ -19,7 +19,7 @@
       <div class="card-content">
         <p class="title" class:is-4={!$tileView} class:is-5={$tileView}>{offer.title}</p>
         {#if offer.subtitle}
-          <p class="subtitle has-text-grey" class:is-6={!$tileView} class:is-7={$tileView}>
+          <p class="subtitle has-text-grey is-6">
             {offer.subtitle}
           </p>
         {/if}
@@ -35,7 +35,7 @@
               <span class="tag is-info">{offer.sellerAddress.city}</span>
             {/if}
             {#if offer.sellerAddress.country && offer.sellerAddress.country !== 'Deutschland'}
-              <span class="tag is-info">{offer.sellerAddress.country}</span>
+              <span class="tag is-warning">{offer.sellerAddress.country}</span>
             {/if}
           {/if}
         </div>
