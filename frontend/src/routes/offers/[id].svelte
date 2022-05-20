@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
   import { onDestroy, onMount } from 'svelte';
   import { getOffer, type Offer } from '../../lib/offers';
-  import OfferCard from '../../lib/OfferCard.svelte';
+  import SingleOffer from '../../lib/SingleOffer.svelte';
 
   let offer: Offer | undefined;
   const unsubscribePage = page.subscribe(async (value) => {
@@ -35,7 +35,7 @@
     </div>
 
     {#if offer}
-      <OfferCard {offer} />
+      <SingleOffer {offer} />
     {/if}
   </section>
 </template>

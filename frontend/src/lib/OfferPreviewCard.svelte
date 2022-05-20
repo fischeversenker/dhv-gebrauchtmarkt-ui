@@ -29,7 +29,7 @@
         </div>
 
         <div class="tags">
-          <span class="tag is-info">{offerPostedDate}</span>
+          <span class="tag is-dark">{offerPostedDate}</span>
           {#if offer.sellerAddress}
             {#if offer.sellerAddress.city}
               <span class="tag is-info">{offer.sellerAddress.city}</span>
