@@ -22,7 +22,12 @@
     $offersOffset += $itemsPerPage;
     $isLoadingMore = true;
     lastTrigger = Date.now();
-    getOffers($offersOffset).then((newOffers) => {
+    getOffers($offersOffset).then((moreOffers) => {
+      // remove existing offers
+      // TODO: show toast "new offers available" if there are new offers
+      const newOffers = moreOffers.filter(
+        (offer) => !$offers.some((o) => o.id === offer.id)
+      );
       offers.update((offers) => offers.concat(newOffers));
       $isLoadingMore = false;
     });
