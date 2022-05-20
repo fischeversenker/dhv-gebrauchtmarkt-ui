@@ -2,8 +2,8 @@
   import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
   import { contactOffer, type ContactFormResult, type Offer } from './offers';
+  import { notification } from './store';
   import ContactForm from './ContactForm.svelte';
-import { notification } from './store';
 
   export let offer: Offer;
 

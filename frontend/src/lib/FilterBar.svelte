@@ -41,7 +41,7 @@
     </div>
     <div class="control">
       <div class="select">
-        <select on:change={(event) => ($filterCategory = Number(event.currentTarget.value))}>
+        <select bind:value={$filterCategory}>
           {#each categories as category}
             <option value={category.value}>{category.label}</option>
           {/each}
