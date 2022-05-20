@@ -23,6 +23,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>{offer?.title}</title>
+</svelte:head>
+
 <template>
   <section class="section">
     <div class="block">

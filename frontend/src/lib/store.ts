@@ -24,6 +24,10 @@ export const tileView = writable<boolean>(
   localStorageTileView === null || localStorageTileView === 'true'
 );
 
+export const FIRST_TIME_VISITOR_STORAGE_KEY = 'firstTimeVisitor';
+const localStorageFirstTimeVisitor = (browser && localStorage.getItem('firstTimeVisitor')) || null;
+export const firstTimeVisitor = writable<boolean>(localStorageFirstTimeVisitor === null);
+
 export function subscribeButSkipFirst<T>(
   store: Writable<T> | Readable<T>,
   callback: (value: T) => void
