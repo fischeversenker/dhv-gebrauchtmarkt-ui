@@ -100,7 +100,10 @@ function commonOfferPropertiesFromOfferElement(
 }
 
 function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
-  const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!;
+  const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!.replace(
+    '/thumbnail/',
+    '/medium/',
+  )!;
   const descriptionElement = offerElement.querySelector('.gm_offer_description');
   const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.trim()!;
 

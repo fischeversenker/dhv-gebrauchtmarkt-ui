@@ -59,7 +59,7 @@
 
   <div class="block">
     <figure class="image header-image" on:click={() => onThumbnailClicked(0)}>
-      <img src={offer.thumbnailUrls[0]} alt={offer.title} />
+      <img src={offer.imageUrls[0]} alt={offer.title} />
     </figure>
   </div>
 
