@@ -143,16 +143,18 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     const classification = rawNormDataElements.find((rawNormDataElement) =>
       rawNormDataElement.label === 'Klassifizierung:'
     );
+    const rawTakeoffWeight = rawNormDataElements.find((rawNormDataElement) =>
+      rawNormDataElement.label === 'Startgewicht'
+    );
+    const takeoffWeightMatches = rawTakeoffWeight?.value.match(/von: (\d+) kg bis: (\d+) kg/);
+    const takeoffWeight = { from: Number(takeoffWeightMatches?.[1]), to: Number(takeoffWeightMatches?.[2]) };
 
     musterData = {
       databaseUrl: `https://dhv.de${rawDatabaseUrl}`,
       certifier: certifier?.value,
       classification: classification?.value,
       norm: norm?.value,
-      // takeoffWeight: {
-      //   from: 70,
-      //   to: 90
-      // }
+      takeoffWeight,
     };
   }
 
