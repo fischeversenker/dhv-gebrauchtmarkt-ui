@@ -1,46 +1,6 @@
 import { get } from 'svelte/store';
-import { filterCategory, filterSearchString, isLoading, itemsPerPage, offers } from './store';
-
-type PriceType = 'VB' | 'Fixed' | 'OnRequest' | 'HighestBid';
-type SellerType = 'private' | 'commercial';
-
-interface CommonOfferProperties {
-  id: number;
-  url: string;
-  title: string;
-  subtitle?: string;
-  price?: number;
-  priceType?: PriceType;
-  sellerType: SellerType;
-  sellerAddress?: {
-    country?: string;
-    city?: string;
-  };
-  postedDate: Date;
-}
-
-export interface OfferPreview extends CommonOfferProperties {
-  thumbnailUrl: string;
-  shortDescription: string;
-}
-
-interface MusterData {
-  databaseUrl?: string;
-  norm?: string;
-  certifier?: string;
-  classification?: string;
-  takeoffWeight?: {
-    from?: number;
-    to?: number;
-  }
-}
-
-export interface Offer extends CommonOfferProperties {
-  description: string;
-  thumbnailUrls: string[];
-  imageUrls: string[];
-  musterData?: MusterData;
-}
+import { filterCategory, filterSearchString, isLoading, itemsPerPage } from './store';
+import type { OfferPreview, Offer } from '@types';
 
 export interface ContactFormResult {
   name: string;

@@ -1,45 +1,5 @@
 import { DOMParser, Element } from '../deps.ts';
-
-type PriceType = 'VB' | 'Fixpreis' | 'Auf Anfrage' | 'Höchstgebot';
-type SellerType = 'private' | 'commercial';
-
-interface CommonOfferProperties {
-  id: number;
-  url: string;
-  title: string;
-  subtitle?: string;
-  price?: number;
-  priceType?: PriceType;
-  sellerType: SellerType;
-  sellerAddress?: {
-    country?: string;
-    city?: string;
-  };
-  postedDate: Date;
-}
-
-interface OfferPreview extends CommonOfferProperties {
-  thumbnailUrl: string;
-  shortDescription: string;
-}
-
-interface MusterData {
-  databaseUrl?: string;
-  norm?: string;
-  certifier?: string;
-  classification?: string;
-  takeoffWeight?: {
-    from?: number;
-    to?: number;
-  };
-}
-
-interface Offer extends CommonOfferProperties {
-  description: string;
-  thumbnailUrls: string[];
-  imageUrls: string[];
-  musterData?: MusterData;
-}
+import type { CommonOfferProperties, MusterData, Offer, OfferPreview, PriceType } from '../types.ts';
 
 export function collectOfferPreviews(rawHtml: string): OfferPreview[] {
   const doc = new DOMParser().parseFromString(rawHtml, 'text/html');

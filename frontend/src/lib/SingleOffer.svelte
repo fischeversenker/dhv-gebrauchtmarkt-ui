@@ -1,7 +1,8 @@
 <script lang="ts">
   import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
-  import { contactOffer, type ContactFormResult, type Offer } from './offers';
+  import { contactOffer, type ContactFormResult } from './offers';
+  import type { Offer} from '@types';
   import { notification } from './store';
   import ContactForm from './ContactForm.svelte';
 

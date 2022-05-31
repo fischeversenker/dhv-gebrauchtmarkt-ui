@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tileView } from './store';
-  import type { OfferPreview } from './offers';
+  import type { OfferPreview } from '@types';
 
   export let offer: OfferPreview;
 

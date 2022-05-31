@@ -1,7 +1,8 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { onDestroy, onMount } from 'svelte';
-  import { getOffer, type Offer } from '$lib/offers';
+  import { getOffer } from '$lib/offers';
+  import type { Offer } from '@types';
   import SingleOffer from '$lib/SingleOffer.svelte';
 
   let offer: Offer | undefined;
