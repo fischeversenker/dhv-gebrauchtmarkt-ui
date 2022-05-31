@@ -80,9 +80,10 @@
 
   {#if offer.musterData}
     <div class="block">
+      <hr>
       <strong>Klassifizierung:</strong> <span>{offer.musterData.classification}</span><br>
       <strong>Startgewicht:</strong> <span>{offer.musterData.takeoffWeight?.from} - {offer.musterData.takeoffWeight?.to} kg</span><br>
-      <a class="button is-info is-light is-fullwidth mt-2" href={offer.musterData.databaseUrl} title="DHV Musterprüfung" target="_blank" rel="noopener">
+      <a class="button is-info is-light is-fullwidth mt-4" href={offer.musterData.databaseUrl} title="DHV Musterprüfung" target="_blank" rel="noopener">
         In DHV-Gerätedatenbank anzeigen
       </a>
       <hr>
@@ -92,6 +93,7 @@
   <div class="block">
     <div class="offer-description">
       {@html offer.description}
+      <hr>
     </div>
   </div>
 
