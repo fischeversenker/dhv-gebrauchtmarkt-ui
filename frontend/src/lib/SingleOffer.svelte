@@ -132,21 +132,14 @@
   {#if $showImageModal}
     <div class="modal is-active" transition:fade={{ duration: 100 }}>
       <div class="modal-background" on:click={() => $showImageModal = false}></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">{offer.title}</p>
-          <button class="delete" aria-label="close" on:click={() => $showImageModal = false}></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="image">
-            <img src={offer.imageUrls[$imageIndex]} alt={`${offer.title}, Bild #${$imageIndex}`}>
-            <div class="image-overlay" on:click={onImageOverlayClicked}></div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div>Bild {$imageIndex + 1} von {offer.imageUrls.length}</div>
-        </footer>
+      <div class="modal-content">
+        <div class="image">
+          <img src={offer.imageUrls[$imageIndex]} alt={`${offer.title}, Bild #${$imageIndex}`}>
+          <div class="image-overlay" on:click={onImageOverlayClicked}></div>
+          <div class="image-count">{$imageIndex + 1}/{offer.imageUrls.length}</div>
+        </div>
       </div>
+      <button class="modal-close is-large" aria-label="close" on:click={() => $showImageModal = false}></button>
     </div>
   {/if}
 
@@ -183,19 +176,24 @@
     word-break: break-word;
   }
 
-  .modal-card-title {
-    width: 94%;
-  }
-
-  .modal-card-body .image {
+  .modal-content .image {
     position: relative;
   }
 
-  .modal-card-body .image-overlay {
+  .modal-content .image .image-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .modal-content .image .image-count {
+    position: absolute;
+    left: .5rem;
+    bottom: .5rem;
+    padding: .1rem .5rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: black;
   }
 </style>
