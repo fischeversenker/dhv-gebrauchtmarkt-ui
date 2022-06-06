@@ -10,7 +10,9 @@
     "sourceMap": true,
     "strict": true,
     "paths": {
-      "@types": ["../backend/src/types"]
+      "@types": ["../backend/src/types"],
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"]
     }
   }
 }
