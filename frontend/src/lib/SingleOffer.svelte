@@ -5,7 +5,7 @@
   import type { Offer} from '@types';
   import { notification } from './store';
   import ContactForm from './ContactForm.svelte';
-import GalleryImage from './GalleryImage.svelte';
+  import GalleryImage from './GalleryImage.svelte';
 
   export let offer: Offer;
 
@@ -27,6 +27,16 @@ import GalleryImage from './GalleryImage.svelte';
   function onThumbnailClicked(index: number) {
     $imageIndex = index;
     $showImageModal = true;
+  }
+
+  function hasMusterData() {
+    if (!offer.musterData) return false;
+
+    const hasClassification = offer.musterData.classification && offer.musterData.classification.length > 0;
+    const hasTakeoffWeight = offer.musterData.takeoffWeight && offer.musterData.takeoffWeight.from && offer.musterData.takeoffWeight.to;
+    const hasDatabaseUrl = offer.musterData.databaseUrl && offer.musterData.databaseUrl !== 'undefined';
+
+    return hasClassification && hasTakeoffWeight && hasDatabaseUrl;
   }
 
   async function onContactFormSubmitted(event: CustomEvent<ContactFormResult>) {
@@ -78,7 +88,7 @@ import GalleryImage from './GalleryImage.svelte';
     </div>
   </div>
 
-  {#if offer.musterData}
+  {#if offer.musterData && hasMusterData()}
     <div class="block">
       <table class="table is-narrow is-striped is-fullwidth">
         <tr>

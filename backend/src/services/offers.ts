@@ -150,7 +150,7 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     const takeoffWeight = { from: Number(takeoffWeightMatches?.[1]), to: Number(takeoffWeightMatches?.[2]) };
 
     musterData = {
-      databaseUrl: `https://dhv.de${rawDatabaseUrl}`,
+      databaseUrl: rawDatabaseUrl ? `https://dhv.de${rawDatabaseUrl}` : undefined,
       certifier: certifier?.value,
       classification: classification?.value,
       norm: norm?.value,
