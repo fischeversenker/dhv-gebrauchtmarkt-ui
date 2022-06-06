@@ -5,6 +5,7 @@
   import type { Offer} from '@types';
   import { notification } from './store';
   import ContactForm from './ContactForm.svelte';
+import GalleryImage from './GalleryImage.svelte';
 
   export let offer: Offer;
 
@@ -15,13 +16,12 @@
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 
-  function onImageOverlayClicked(event: MouseEvent) {
-    const windowWidth = window.innerWidth;
-    if (event.clientX < windowWidth / 2) {
-      $imageIndex = ($imageIndex - 1 + offer.imageUrls.length) % offer.imageUrls.length;
-    } else {
-      $imageIndex = ($imageIndex + 1) % offer.imageUrls.length;
-    }
+  function onShowNextImage() {
+    $imageIndex = ($imageIndex + 1) % offer.imageUrls.length;
+  }
+
+  function onShowPreviousImage() {
+    $imageIndex = ($imageIndex - 1 + offer.imageUrls.length) % offer.imageUrls.length;
   }
 
   function onThumbnailClicked(index: number) {
@@ -135,11 +135,14 @@
     <div class="modal is-active" transition:fade={{ duration: 100 }}>
       <div class="modal-background" on:click={() => $showImageModal = false}></div>
       <div class="modal-content">
-        <div class="image">
-          <img src={offer.imageUrls[$imageIndex]} alt={`${offer.title}, Bild #${$imageIndex}`}>
-          <div class="image-overlay" on:click={onImageOverlayClicked}></div>
-          <div class="image-count">{$imageIndex + 1}/{offer.imageUrls.length}</div>
-        </div>
+        <GalleryImage
+          src={offer.imageUrls[$imageIndex]}
+          alt={`${offer.title}, Bild #${$imageIndex}`}
+          index={$imageIndex + 1}
+          count={offer.imageUrls.length}
+          on:showNext={onShowNextImage}
+          on:showPrevious={onShowPreviousImage}
+        />
       </div>
       <button class="modal-close is-large" aria-label="close" on:click={() => $showImageModal = false}></button>
     </div>
@@ -176,26 +179,5 @@
 
   .offer-description {
     word-break: break-word;
-  }
-
-  .modal-content .image {
-    position: relative;
-  }
-
-  .modal-content .image .image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  .modal-content .image .image-count {
-    position: absolute;
-    left: .5rem;
-    bottom: .5rem;
-    padding: .1rem .5rem;
-    background-color: rgba(255, 255, 255, 0.7);
-    color: black;
   }
 </style>
