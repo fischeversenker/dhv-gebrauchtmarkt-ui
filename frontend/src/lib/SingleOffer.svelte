@@ -116,12 +116,14 @@
       {/if}
     </div>
 
-    {#if offer.price || offer.priceType}
-      <p class="title is-5">
-        {#if offer.price}<strong>{offer.price} €</strong>{/if}
-        {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
+    <p class="title is-5">
+        {#if offer.price || offer.priceType}
+          {#if offer.price}<strong>{offer.price} €</strong>{/if}
+          {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
+        {:else}
+          (Keine Preisangabe)
+        {/if}
       </p>
-    {/if}
   </div>
 
   <div class="block">

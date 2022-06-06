@@ -40,12 +40,14 @@
           {/if}
         </div>
 
-        {#if offer.price || offer.priceType}
-          <p class="title is-5">
+        <p class="title is-5">
+          {#if offer.price || offer.priceType}
             {#if offer.price}<strong>{offer.price} €</strong>{/if}
             {#if offer.priceType}<span class="has-text-grey">{offer.priceType}</span>{/if}
-          </p>
-        {/if}
+          {:else}
+            <span class="has-text-grey is-size-6">(Keine Preisangabe)</span>
+          {/if}
+        </p>
       </div>
     </div>
   </a>
