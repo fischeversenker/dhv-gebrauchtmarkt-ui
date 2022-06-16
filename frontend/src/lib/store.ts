@@ -18,12 +18,6 @@ export const indexScrollTop = writable(0);
 
 export const notification = writable<{ type: 'success' | 'error', message: string, duration?: number, callback?: () => void } | null>(null);
 
-export const TILE_VIEW_STORAGE_KEY = 'tileView';
-const localStorageTileView = (browser && localStorage.getItem(TILE_VIEW_STORAGE_KEY)) || false;
-export const tileView = writable<boolean>(
-  localStorageTileView === null || localStorageTileView === 'true'
-);
-
 export const FIRST_TIME_VISITOR_STORAGE_KEY = 'firstTimeVisitor';
 const localStorageFirstTimeVisitor = (browser && localStorage.getItem(FIRST_TIME_VISITOR_STORAGE_KEY)) || null;
 export const firstTimeVisitor = writable<boolean>(localStorageFirstTimeVisitor === null);

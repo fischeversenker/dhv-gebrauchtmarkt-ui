@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { tileView } from './store';
   import type { OfferPreview } from '@types';
 
   export let offer: OfferPreview;
@@ -9,15 +8,15 @@
 
 <template>
   <a href={`offers/${offer.id}`} sveltekit:noscroll>
-    <div class="card" class:card--compact={$tileView}>
+    <div class="card">
       <div class="card-image">
-        <figure class="image" class:is-1by1={$tileView}>
+        <figure class="image is-1by1">
           <img src={offer.thumbnailUrl} alt={offer.title} />
         </figure>
       </div>
 
       <div class="card-content">
-        <p class="title" class:is-4={!$tileView} class:is-5={$tileView}>{offer.title}</p>
+        <p class="title is-5">{offer.title}</p>
         {#if offer.subtitle}
           <p class="subtitle has-text-grey is-6">
             {offer.subtitle}
@@ -59,7 +58,7 @@
     object-fit: cover;
   }
 
-  .card--compact .card-content {
+  .card-content {
     padding: 1rem 0.5rem;
   }
 
@@ -67,13 +66,13 @@
     word-break: break-word;
   }
 
-  .card--compact .content {
+  .content {
     position: relative;
     height: 9rem;
     overflow: hidden;
   }
 
-  .card--compact .content::after {
+  .content::after {
     content: '';
     position: absolute;
     inset: 0;

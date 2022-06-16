@@ -1,40 +1,24 @@
 <script lang="ts">
   import { fade, blur } from 'svelte/transition';
-  import { browser } from '$app/env';
   import {
     offers,
     isLoadingMore,
-    tileView,
     isLoading,
-    TILE_VIEW_STORAGE_KEY,
     initialOffersGotLoaded
   } from './store';
   import OfferPreviewCard from './OfferPreviewCard.svelte';
-
-  function toggleTileView() {
-    tileView.update((currentValue) => {
-      if (browser) localStorage.setItem(TILE_VIEW_STORAGE_KEY, String(!currentValue));
-      return !currentValue;
-    });
-  }
 </script>
 
 <template>
   <section class="section">
-    <div class="block tile-view-toggle">
-      <button class="button" on:click={toggleTileView}>
-        <i class="fa-solid" class:fa-grip-vertical={!$tileView} class:fa-grip-lines={$tileView} />
-      </button>
-    </div>
-
-    <div class:grid--active={$tileView}>
+    <div class="grid">
       {#each $offers as offer (offer.id)}
-        <div class:block={!$tileView} in:blur={{ duration: 200, amount: 20 }}>
+        <div in:blur={{ duration: 200, amount: 20 }}>
           <OfferPreviewCard {offer} />
         </div>
       {:else}
         {#if $isLoading}
-          <div class:block={!$tileView} in:fade>
+          <div in:fade>
             <progress class="progress is-info" max="100">0%</progress>
           </div>
         {:else if $initialOffersGotLoaded}
@@ -45,7 +29,7 @@
       {/each}
 
       {#if $isLoadingMore}
-        <div class:block={!$tileView} in:fade>
+        <div in:fade>
           <progress class="progress is-info" max="100">0%</progress>
         </div>
       {/if}
@@ -54,13 +38,9 @@
 </template>
 
 <style>
-  .grid--active {
+  .grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 0.5rem;
-  }
-
-  .tile-view-toggle {
-    text-align: right;
   }
 </style>
