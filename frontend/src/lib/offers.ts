@@ -26,6 +26,7 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
   return receivedOffers.map((offer: OfferPreview) => {
     return {
       ...offer,
+      path: `/offers/${offer.id}`,
       postedDate: new Date(offer.postedDate),
       thumbnailUrl: offer.thumbnailUrl.includes('_dummy.png')
         ? '/images/gm_dummy.png'
@@ -38,7 +39,11 @@ export async function getOffer(id: number): Promise<Offer> {
   if (!id || Number.isNaN(id)) {
     throw new Error(`Invalid offer id: ${id}`);
   }
+
+  isLoading.set(true);
   const offer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`).then((res) => res.json()) as Offer;
+  isLoading.set(false);
+
   if (!offer) {
     throw new Error(`Wasn't able to find offer with ID ${id}`);
   }

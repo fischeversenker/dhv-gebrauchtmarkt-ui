@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <a href={`offers/${offer.id}`} sveltekit:noscroll>
+  <a href={offer.path} sveltekit:noscroll>
     <div class="card">
       <div class="card-image">
         <figure class="image is-1by1">

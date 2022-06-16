@@ -19,6 +19,7 @@ export interface CommonOfferProperties {
 export interface OfferPreview extends CommonOfferProperties {
   thumbnailUrl: string;
   shortDescription: string;
+  path?: string;
 }
 
 export interface Offer extends CommonOfferProperties {
