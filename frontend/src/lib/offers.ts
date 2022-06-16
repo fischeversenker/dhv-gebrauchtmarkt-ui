@@ -60,6 +60,23 @@ export async function getOffer(id: number): Promise<Offer> {
   };
 }
 
+export async function getMyOffers() {
+  isLoading.set(true);
+  const receivedOffers = await fetch(`${import.meta.env.VITE_API_BASE}/offers/mine`, { credentials: 'include' }).then((res) => res.json()) as OfferPreview[];
+  isLoading.set(false);
+
+  return receivedOffers.map((offer: OfferPreview) => {
+    return {
+      ...offer,
+      path: `/offers/${offer.id}`,
+      postedDate: new Date(offer.postedDate),
+      thumbnailUrl: offer.thumbnailUrl.includes('_dummy.png')
+        ? '/images/gm_dummy.png'
+        : offer.thumbnailUrl
+    };
+  });
+}
+
 export async function contactOffer(data: OfferContactData): Promise<{ success: boolean, message: string }> {
   const res = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${data.offerId}/contact`, {
     method: 'POST',

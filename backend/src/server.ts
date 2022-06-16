@@ -30,7 +30,10 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(oakCors());
+app.use(oakCors({
+  origin: ['http://localhost:3000', 'https://dhv-gebrauchtmarkt-ui.netlify.app'],
+  credentials: true,
+}));
 
 app.use(router.routes());
 app.use(router.allowedMethods());
