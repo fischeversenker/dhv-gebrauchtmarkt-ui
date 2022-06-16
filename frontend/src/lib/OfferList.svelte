@@ -1,18 +1,20 @@
 <script lang="ts">
   import { fade, blur } from 'svelte/transition';
   import {
-    offers,
     isLoadingMore,
     isLoading,
     initialOffersGotLoaded
   } from './store';
   import OfferPreviewCard from './OfferPreviewCard.svelte';
+  import type { OfferPreview } from '../../../backend/src/types';
+
+  export let offers: OfferPreview[];
 </script>
 
 <template>
   <section class="section">
     <div class="grid">
-      {#each $offers as offer (offer.id)}
+      {#each offers as offer (offer.id)}
         <div in:blur={{ duration: 200, amount: 20 }}>
           <OfferPreviewCard {offer} />
         </div>

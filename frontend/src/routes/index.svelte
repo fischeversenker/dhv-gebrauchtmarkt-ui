@@ -61,7 +61,7 @@
 </svelte:head>
 
 <template>
-  <OfferList />
+  <OfferList offers={$offers} />
 
   <InifinityLoadingFooter />
 
