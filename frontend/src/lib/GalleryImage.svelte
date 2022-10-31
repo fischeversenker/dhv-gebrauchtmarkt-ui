@@ -14,14 +14,17 @@
   let imageOffsetX: number = 0;
 
   function onImageTouchStart(event: TouchEvent) {
+    if (count === 1) return;
     touchStartX = event.touches[0].clientX;
   }
 
   function onImageTouchMove(event: TouchEvent) {
+    if (count === 1) return;
     imageOffsetX = event.touches[0].clientX - touchStartX;
   }
 
   function onImageTouchEnd(event: TouchEvent) {
+    if (count === 1) return;
     const touchEnd = event.changedTouches[0].clientX;
 
     $loading = true;
