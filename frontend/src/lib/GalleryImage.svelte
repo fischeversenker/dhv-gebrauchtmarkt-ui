@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { writable } from 'svelte/store';
 
   const dispatch = createEventDispatcher();
 
@@ -8,6 +9,7 @@
   export let index: number;
   export let count: number;
 
+  let loading = writable(false);
   let touchStartX: number;
   let imageOffsetX: number = 0;
 
@@ -22,6 +24,7 @@
   function onImageTouchEnd(event: TouchEvent) {
     const touchEnd = event.changedTouches[0].clientX;
 
+    $loading = true;
     if (touchStartX < touchEnd) {
       dispatch('showPrevious')
     } else {
@@ -40,10 +43,14 @@
       dispatch('showNext');
     }
   }
+
+  function onImageLoaded() {
+    $loading = false;
+  }
 </script>
 
-<div class="image">
-  <img class="image-image" src={src} alt={alt} style:--offset-x={imageOffsetX}>
+<div class="image" class:loading={$loading}>
+  <img class="image-image" src={src} alt={alt} style:--offset-x={imageOffsetX} on:load={onImageLoaded}>
   <div class="image-overlay" on:click|preventDefault={onImageOverlayClicked} on:touchstart|preventDefault={onImageTouchStart} on:touchmove={onImageTouchMove} on:touchend={onImageTouchEnd}></div>
   <div class="image-count">{index}/{count}</div>
 </div>
@@ -51,6 +58,12 @@
 <style>
   .image {
     position: relative;
+    transition: opacity .2s .1s ease-in-out;
+  }
+
+  .image.loading {
+    opacity: 0.4;
+    pointer-events: none;
   }
 
   .image-image {
