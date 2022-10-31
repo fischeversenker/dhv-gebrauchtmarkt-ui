@@ -6,6 +6,7 @@
   import { notification } from './store';
   import ContactForm from './ContactForm.svelte';
   import GalleryImage from './GalleryImage.svelte';
+  import { onDestroy, onMount } from 'svelte';
 
   export let offer: Offer;
 
@@ -27,6 +28,14 @@
   function onThumbnailClicked(index: number) {
     $imageIndex = index;
     $showImageModal = true;
+    window.history.pushState({ image: index }, '');
+  }
+
+  function onImageModalClose({ pop = true }: { pop?: boolean } = { pop: true}) {
+    $showImageModal = false;
+    if (pop) {
+      window.history.back();
+    }
   }
 
   function hasMusterData() {
@@ -56,6 +65,18 @@
       message: result.message,
     };
   }
+
+  function onPopState() {
+    onImageModalClose({ pop: false });
+  }
+
+  onMount(() => {
+    window.addEventListener('popstate', onPopState);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('popstate', onPopState);
+  });
 </script>
 
 <template>
@@ -143,7 +164,7 @@
 
   {#if $showImageModal}
     <div class="modal is-active" transition:fade={{ duration: 100 }}>
-      <div class="modal-background" on:click={() => $showImageModal = false}></div>
+      <div class="modal-background" on:click={() => onImageModalClose()}></div>
       <div class="modal-content">
         <GalleryImage
           src={offer.imageUrls[$imageIndex]}
@@ -154,7 +175,7 @@
           on:showPrevious={onShowPreviousImage}
         />
       </div>
-      <button class="modal-close is-large" aria-label="close" on:click={() => $showImageModal = false}></button>
+      <button class="modal-close is-large" aria-label="close" on:click={() => onImageModalClose()}></button>
     </div>
   {/if}
 
