@@ -18,8 +18,6 @@ export async function request(
   headers.append('Referer', 'https://www.dhv.de/');
   headers.append('Cookie', `dhvsid=${sessionId}`);
 
-  console.log('request', url, headers);
-
   const requestOptions: RequestInit = {
     method: method,
     headers: headers,
