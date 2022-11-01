@@ -15,6 +15,12 @@ const config = {
     // Override http methods in the Todo forms
     methodOverride: {
       allowed: ['PATCH', 'DELETE']
+    },
+    // remove this once @pusher/push-notifications-web ships as proper ESM module
+    vite: {
+      ssr: {
+        noExternal: ['@pusher/push-notifications-web'],
+      }
     }
   }
 };

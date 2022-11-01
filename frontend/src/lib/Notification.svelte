@@ -24,9 +24,15 @@
 <template>
   {#if $notification !== null}
     <div class="box" transition:fly={{ y: 400 }} on:click={onNotificationClicked}>
-      <div class="notification" class:is-success={$notification.type === 'success'} class:is-danger={$notification.type === 'error'}>
-        <button class="delete"></button>
-        {$notification.message}
+      <div
+        class="notification"
+        class:is-info={$notification.type === 'info'}
+        class:is-warning={$notification.type === 'warning'}
+        class:is-success={$notification.type === 'success'}
+        class:is-danger={$notification.type === 'error'}
+      >
+        <button class="delete" />
+        {@html $notification.message}
       </div>
     </div>
   {/if}

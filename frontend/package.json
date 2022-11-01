@@ -35,6 +35,7 @@
   "type": "module",
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
+    "@pusher/push-notifications-web": "^1.1.0",
     "bulma": "^0.9.4",
     "cookie": "^0.4.1",
     "lodash-es": "^4.17.21"
