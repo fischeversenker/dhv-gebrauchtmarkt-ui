@@ -61,7 +61,7 @@
 <style>
   .image {
     position: relative;
-    transition: opacity .2s .1s ease-in-out;
+    transition: opacity .2s ease-out;
   }
 
   .image.loading {
