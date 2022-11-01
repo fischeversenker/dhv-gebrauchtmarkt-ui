@@ -1,8 +1,5 @@
-import { Application, oakCors, dotEnvConfig } from './deps.ts';
+import { Application, oakCors } from './deps.ts';
 import { router } from './routes.ts';
-
-// load env vars
-dotEnvConfig({ export: true });
 
 const app = new Application();
 
