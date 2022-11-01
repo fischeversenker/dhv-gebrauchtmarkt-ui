@@ -1,1 +1,2 @@
-Trello Board: https://trello.com/b/c6ac7pnM/dhv-gebrauchtmarkt-20
+- Trello Board: https://trello.com/b/c6ac7pnM/dhv-gebrauchtmarkt-20
+- Requires `.env` file in root with `PUSHER_PUBLIC_KEY` and `PUSHER_INSTANCE_ID` for Backend
