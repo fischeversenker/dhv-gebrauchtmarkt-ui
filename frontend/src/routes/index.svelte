@@ -74,7 +74,7 @@
       await requestNotificationPermissionIfNecessary();
     } catch (e) {
       $notification = {
-        message: 'Bitte erlaube Benachrichtigungen für diese Seite wenn du über neue Angebote informiert werden ',
+        message: 'Bitte erlaube Benachrichtigungen für diese Seite wenn du über neue Angebote informiert werden willst.',
         type: 'warning'
       };
       return;
