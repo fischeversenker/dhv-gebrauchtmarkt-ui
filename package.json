@@ -6,7 +6,7 @@
   "scripts": {
     "start:frontend": "live-server src",
     "start:backend": "deno run --allow-net --watch backend/src/server.ts",
-    "prepare": "husky install"
+    "prepare": "git config core.hooksPath ./.hooks"
   },
   "lint-staged": {
     "backend/src/**/*.ts": [
@@ -15,7 +15,6 @@
     ]
   },
   "devDependencies": {
-    "husky": "^7.0.4",
     "lint-staged": "^12.4.0",
     "live-server": "^1.2.1"
   }
