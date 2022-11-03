@@ -1,13 +1,15 @@
 ## Backend
 - Runtime: Deno
 - Framework: Oak
-- Hosting: Deno Deploy
+- Hosting: dash.deno.com
+- Database: railway.app
+- CronJob: cron-job.org
+- Notifications: pusher.com
 
 ## Frontend
 - Framework: SvelteKit
 - CSS: Bulma
-- Hosting: Netlify
+- Hosting: netlify.com
 
 ## Both
 - Trello Board: https://trello.com/b/c6ac7pnM/dhv-gebrauchtmarkt-20
-- Pusher Instance: https://dashboard.pusher.com/beams/instances/a2cf8550-196a-448a-8304-d6e87f19ff8b
