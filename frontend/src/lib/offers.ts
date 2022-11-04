@@ -1,6 +1,7 @@
 import { get } from 'svelte/store';
 import { filterCategory, filterSearchString, isLoading, itemsPerPage } from './store';
 import type { OfferPreview, Offer } from '@types';
+import { addSeenOffer } from './idb';
 
 export interface ContactFormResult {
   name: string;
@@ -22,6 +23,8 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
     )}&offset=${offset}&itemsPerPage=${get(itemsPerPage)}&category=${get(filterCategory)}`
   ).then((res) => res.json());
   isLoading.set(false);
+
+  addSeenOffer(receivedOffers.map((offer: OfferPreview) => offer.id));
 
   return receivedOffers.map((offer: OfferPreview) => {
     return {

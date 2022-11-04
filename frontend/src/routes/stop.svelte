@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/env';
   import {
-      notification
+      notification, reactedToNotificationRequest, REACTED_TO_NOTIFICATION_REQUEST_KEY
   } from '$lib/store';
   import { Client } from "@pusher/push-notifications-web";
   import { onMount } from 'svelte';
@@ -15,9 +15,13 @@
       $notification = {
         message: 'Du erhältst nun keine Benachrichtigungen mehr.',
         type: 'success'
-      }
-    })
-    .then(() => {
+      };
+
+      reactedToNotificationRequest.update(() => {
+        if (browser) localStorage.removeItem(REACTED_TO_NOTIFICATION_REQUEST_KEY);
+        return true;
+      });
+
       setTimeout(() => {
         if (browser) {
           window.location.href = '/';
