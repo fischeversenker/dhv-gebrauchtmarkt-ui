@@ -32,7 +32,7 @@ export const offersRouter = new Router()
     ) => response.json());
     const offerRawHtml = offerResponse.content;
     const offer = collectOffer(offerRawHtml, id);
-    context.response.headers.set('Cache-Control', 'max-age=604800');
+    context.response.headers.set('Cache-Control', 'max-age=3600');
     context.response.body = offer;
   })
   .post('/:id/contact', async (context) => {
