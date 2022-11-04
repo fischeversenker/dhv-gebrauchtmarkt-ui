@@ -51,15 +51,11 @@ VALUES ${newOffers.map((offer) => `(${offer})`).join(',')};`);
   const pusherBody = {
     interests: ['newOffers'],
     web: {
+      data: {
+        offers: newOffers,
+      },
       notification: {
-        title: 'Neue Angebote',
-        body: `Es gibt ${
-          newOffers.length === 1 ? '1 neues Angebot' : `${newOffers.length} neue Angebote`
-        } im DHV Gebrauchtmarkt`,
-        icon: 'https://www.dhv.de/dbresources/dhv/images/dhvheader2011/dhv_logo.png',
-        deep_link: `https://dhv-gebrauchtmarkt-ui.netlify.app/${
-          newOffers.length === 1 ? `offers/${newOffers[0]}` : ''
-        }`,
+        hide_notification_if_site_has_focus: true,
       },
     },
   };
