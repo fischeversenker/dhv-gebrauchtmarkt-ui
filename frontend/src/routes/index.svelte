@@ -103,10 +103,9 @@
 
     if (!$reactedToNotificationRequest) {
       $notification = {
-            message: '<strong>Experimental Feature:</strong><br>Erhalte Benachrichtigungen wenn es neue Angebote gibt 🔔',
+            message: 'Erhalte Benachrichtigungen wenn es neue Angebote gibt 🔔<br>Tippe hier!',
             type: 'info',
-            callback: () => subscribeToNewOffers(),
-            duration: 10000
+            callback: () => subscribeToNewOffers()
           };
     }
   });
