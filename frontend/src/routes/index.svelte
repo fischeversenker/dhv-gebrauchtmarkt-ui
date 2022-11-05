@@ -101,7 +101,7 @@
     $offers = await getOffers($offersOffset);
     $initialOffersGotLoaded = true;
 
-    if (!$reactedToNotificationRequest && window.location.search.includes('dev')) {
+    if (!$reactedToNotificationRequest) {
       $notification = {
             message: '<strong>Experimental Feature:</strong><br>Erhalte Benachrichtigungen wenn es neue Angebote gibt 🔔',
             type: 'info',
