@@ -170,6 +170,9 @@ self.addEventListener('push', e => {
     const options = {
       body,
       icon,
+      tag: 'new-offers',
+      badge: icon,
+      renotify: true,
       data: {
         pusher: {
           customerPayload: payloadFromCallback,

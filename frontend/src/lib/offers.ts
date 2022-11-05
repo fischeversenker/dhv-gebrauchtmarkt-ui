@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { filterCategory, filterSearchString, isLoading, itemsPerPage } from './store';
 import type { OfferPreview, Offer } from '@types';
-import { addSeenOffer } from './idb';
+import { addSeenOffer } from './indexed-db';
 
 export interface ContactFormResult {
   name: string;

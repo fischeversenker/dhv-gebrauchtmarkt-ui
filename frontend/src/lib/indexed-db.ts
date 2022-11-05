@@ -3,7 +3,7 @@
 
 let db: IDBDatabase | null = null;
 
-export function connect() {
+export function connectToIndexedDb() {
   if (!browser) {
     return;
   }
