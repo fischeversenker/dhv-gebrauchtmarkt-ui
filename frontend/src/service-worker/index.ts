@@ -159,13 +159,9 @@ self.addEventListener('push', e => {
     }
 
     const title = 'DHV Gebrauchtmarkt';
-    const body = `Es gibt ${
-      newOffers.length === 1 ? '1 neues Angebot' : `${newOffers.length} neue Angebote`
-    } im DHV Gebrauchtmarkt`;
+    const body = `Es gibt neue Angebote! Tippe hier um den Gebrauchtmarkt zu öffnen.`;
     const icon = 'https://www.dhv.de/dbresources/dhv/images/dhvheader2011/dhv_logo.png';
-    const deepLink = `https://dhv-gebrauchtmarkt-ui.netlify.app/${
-      newOffers.length === 1 ? `offers/${newOffers[0]}` : ''
-    }`;
+    const deepLink = 'https://dhv-gebrauchtmarkt-ui.netlify.app/';
 
     const options = {
       body,

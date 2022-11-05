@@ -1,35 +1,20 @@
-import { PostgresClient, Router } from '../deps.ts';
+import { Router } from '../deps.ts';
 import { collectOfferPreviews } from '../services/offers.ts';
 import { request } from '../services/request.ts';
 
 export const notificationsRouter = new Router().get('/', async (context) => {
-  const postgresClient = new PostgresClient(Deno.env.get('POSTGRES_URL'));
-  await postgresClient.connect();
-
-  await postgresClient.queryArray(`CREATE TABLE IF NOT EXISTS latest_offers (
-  id integer PRIMARY KEY
-);`);
-
-  const databaseResultRaw = await postgresClient.queryArray('SELECT id FROM latest_offers');
-  const databaseResult = databaseResultRaw.rows.flat();
-
   const offersResponse = await request(
     `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigen?rubrik=0&land=0&itemsperpage=5&order=1`,
   ).then((res) => res.json());
 
   const offers = collectOfferPreviews(offersResponse.content);
 
-  const newOffers = offers.filter((offer) => !databaseResult.includes(offer.id))
-    .map((offer) => offer.id);
+  const newOffers = offers.map((offer) => offer.id);
   if (newOffers.length === 0) {
+    context.response.body = [];
     context.response.status = 200;
     return;
   }
-
-  await postgresClient.queryArray(`INSERT INTO latest_offers(id)
-VALUES ${newOffers.map((offer) => `(${offer})`).join(',')};`);
-
-  await postgresClient.end();
 
   const pusherUrl = `https://${
     Deno.env.get(
@@ -65,5 +50,6 @@ VALUES ${newOffers.map((offer) => `(${offer})`).join(',')};`);
     headers,
     body: JSON.stringify(pusherBody),
   });
-  context.response.body = response;
+  context.response.body = response.body;
+  context.response.status = response.status;
 });
