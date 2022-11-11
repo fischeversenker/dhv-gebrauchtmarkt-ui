@@ -1,65 +1,100 @@
 export default class SeenOffersStore {
-  constructor() {
-    this._dbConn = null;
-  }
+  private dbConn: null | IDBDatabase = null;
 
   get isConnected() {
-    return this._dbConn !== null;
+    return this.dbConn !== null;
   }
 
   connect() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open('offersDatabase');
 
-      request.onsuccess = event => {
-        const db = event.target.result;
-        this._dbConn = db;
+      request.onsuccess = () => {
+        const db = request.result;
+        this.dbConn = db;
         resolve(null);
       };
 
-      request.onupgradeneeded = event => {
-        const db = event.target.result;
+      request.onupgradeneeded = () => {
+        const db = request.result;
         db.createObjectStore('seenOfferPreviews', {
           keyPath: 'id',
         });
+        db.createObjectStore('pendingNotifications', {
+          keyPath: 'id'
+        });
       };
 
-      request.onerror = event => {
-        const error = new Error(`Database error: ${event.target.error}`);
+      request.onerror = () => {
+        const error = new Error(`Database error: ${request.error}`);
         reject(error);
       };
     });
   }
 
-  #getOffer(offerId: number) {
-    if (!this.isConnected) {
-      throw new Error(
-        'Cannot read value: SeenOfferStore not connected to IndexedDB'
-      );
-    }
-
+   private getOffer(offerId: number) {
     return new Promise((resolve, reject) => {
-      const request = this._dbConn
+      if (!this.dbConn) {
+        reject('No IDB connection!');
+        return;
+      }
+
+      const request = this.dbConn
         .transaction('seenOfferPreviews')
         .objectStore('seenOfferPreviews')
         .get(offerId);
 
-      request.onsuccess = event => {
-        const state = event.target.result;
+      request.onsuccess = () => {
+        const state = request.result;
         resolve(state);
       };
 
-      request.onerror = event => {
-        reject(event.target.error);
+      request.onerror = () => {
+        reject(request.error);
       };
     });
   }
 
-  async hasSeenOffer(offerId) {
-    const offer = await this.#getOffer(offerId);
+  async hasSeenOffer(offerId: number) {
+    const offer = await this.getOffer(offerId);
     if (!offer) {
       return false;
     }
     return true;
+  }
+
+  async addPendingNotification(offerId: number) {
+    const transaction = this.dbConn?.transaction('pendingNotifications', 'readwrite');
+
+    if (!transaction) {
+      throw new Error('No IDB connection!');
+    }
+
+    const store = transaction.objectStore('pendingNotifications');
+    const request = store.put({ id: offerId });
+    request.onerror = e => console.warn('could not add pending notifications', offerId, e);
+  }
+
+  async hasPendingNotification(offerId: number) {
+    return new Promise((resolve, reject) => {
+      if (!this.dbConn) {
+        reject('No IDB connection!');
+        return;
+      }
+
+      const request = this.dbConn
+        .transaction('pendingNotifications')
+        .objectStore('pendingNotifications')
+        .get(offerId);
+
+      request.onsuccess = () => {
+        const state = request.result;
+        resolve(state);
+      };
+
+      request.onerror = () => {
+        reject(request.error);
+      };
+    });
   }
 }

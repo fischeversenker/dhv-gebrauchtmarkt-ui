@@ -1,23 +1,27 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import 'bulma/bulma.sass';
   import Notification from '$lib/Notification.svelte';
   import FirstTimeVisitorModal from '$lib/FirstTimeVisitorModal.svelte';
-  import { connectToIndexedDb } from '$lib/indexed-db';
+  import { clearPendingNotifications, connectToIndexedDb } from '$lib/indexed-db';
 
-  connectToIndexedDb();
+  let worker: ServiceWorker | null = null;
 
-  onMount(() => {
-    window.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        navigator.serviceWorker.ready.then((registration) => {
-          registration.getNotifications({ tag: 'new-offers' }).then((notifications) => {
-            notifications.forEach((notification) => notification.close());
-          });
+  onMount(async () => {
+    await connectToIndexedDb();
+
+    if (!worker && document.visibilityState === 'visible') {
+      navigator.serviceWorker.ready.then((registration) => {
+        clearPendingNotifications();
+
+        worker = registration.active;
+        registration.getNotifications({ tag: 'new-offers' }).then((notifications) => {
+          notifications.forEach((notification) => notification.close());
         });
-      }
-    });
+      });
+    }
   });
+
 </script>
 
 <main>

@@ -2,11 +2,18 @@ import doRequest from './do-request';
 import DeviceStateStore from './device-state-store';
 import SeenOffersStore from './seen-offers-store';
 
+declare global {
+  interface Window {
+    PusherPushNotifications: any;
+    clients: any;
+  }
+}
+
 self.PusherPushNotifications = {
   endpointOverride: null,
   onNotificationReceived: null,
 
-  _endpoint: instanceId =>
+  _endpoint: (instanceId: string) =>
     self.PusherPushNotifications.endpointOverride
       ? self.PusherPushNotifications.endpointOverride
       : `https://${instanceId}.pushnotifications.pusher.com`,
@@ -131,58 +138,59 @@ self.addEventListener('push', e => {
 
   const pusherMetadata = payload.data.pusher;
 
-  const handleNotification = async payloadFromCallback => {
-    const hideNotificationIfSiteHasFocus =
-      payloadFromCallback.notification.hide_notification_if_site_has_focus ===
-      true;
-    if (
-      hideNotificationIfSiteHasFocus &&
-      (await self.PusherPushNotifications._hasFocusedClient())
-    ) {
-      return;
+  e.waitUntil(handleNotification(customerPayload, pusherMetadata));
+});
+
+const handleNotification = async (payloadFromCallback, pusherMetadata) => {
+  const hideNotificationIfSiteHasFocus =
+    payloadFromCallback.notification.hide_notification_if_site_has_focus ===
+    true;
+  if (
+    hideNotificationIfSiteHasFocus &&
+    (await self.PusherPushNotifications._hasFocusedClient())
+  ) {
+    return;
+  }
+
+  // if new offers have not yet been seen, show notification
+  const offerStore = new SeenOffersStore();
+  await offerStore.connect();
+
+  const newOffers = [];
+  for (const offerId of payloadFromCallback.data.offers) {
+    const hasSeenOffer = await offerStore.hasSeenOffer(offerId);
+    const isAlreadyPending = await offerStore.hasPendingNotification(offerId);
+    if (!hasSeenOffer && !isAlreadyPending) {
+      newOffers.push(offerId);
+      await offerStore.addPendingNotification(offerId);
     }
+  }
+  if (newOffers.length === 0) {
+    return;
+  }
 
-    // if new offers have not yet been seen, show notification
-    const offerStore = new SeenOffersStore();
-    await offerStore.connect();
+  const title = 'DHV Gebrauchtmarkt';
+  const body = `Es gibt neue Angebote! Tippe hier um den Gebrauchtmarkt zu öffnen.`;
+  const icon = 'https://www.dhv.de/dbresources/dhv/images/dhvheader2011/dhv_logo.png';
+  const deepLink = 'https://dhv-gebrauchtmarkt-ui.netlify.app/';
 
-    const newOffers = [];
-    for (const offerId of payloadFromCallback.data.offers) {
-      const hasSeenOffer = await offerStore.hasSeenOffer(offerId);
-      if (!hasSeenOffer) {
-        newOffers.push(offerId);
-      }
-    }
-
-    if (newOffers.length === 0) {
-      return;
-    }
-
-    const title = 'DHV Gebrauchtmarkt';
-    const body = `Es gibt neue Angebote! Tippe hier um den Gebrauchtmarkt zu öffnen.`;
-    const icon = 'https://www.dhv.de/dbresources/dhv/images/dhvheader2011/dhv_logo.png';
-    const deepLink = 'https://dhv-gebrauchtmarkt-ui.netlify.app/';
-
-    const options = {
-      body,
-      icon,
-      tag: 'new-offers',
-      badge: icon,
-      renotify: true,
-      data: {
-        pusher: {
-          customerPayload: payloadFromCallback,
-          deepLink,
-          pusherMetadata,
-        },
+  const options = {
+    body,
+    icon,
+    tag: 'new-offers',
+    badge: icon,
+    renotify: true,
+    data: {
+      pusher: {
+        customerPayload: payloadFromCallback,
+        deepLink,
+        pusherMetadata,
       },
-    };
-
-    return self.registration.showNotification(title, options);
+    },
   };
 
-  e.waitUntil(handleNotification(customerPayload));
-});
+  await self.registration.showNotification(title, options);
+};
 
 self.addEventListener('notificationclick', e => {
   const { pusher } = e.notification.data;
