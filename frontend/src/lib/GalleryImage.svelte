@@ -28,10 +28,18 @@
     const touchEnd = event.changedTouches[0].clientX;
 
     $loading = true;
-    if (touchStartX < touchEnd) {
-      dispatch('showPrevious');
+    if (Math.abs(touchEnd - touchStartX) < 30) {
+      if (touchEnd < window.innerWidth / 2) {
+        dispatch('showPrevious');
+      } else {
+        dispatch('showNext');
+      }
     } else {
-      dispatch('showNext');
+      if (touchStartX < touchEnd) {
+        dispatch('showPrevious');
+      } else {
+        dispatch('showNext');
+      }
     }
 
     touchStartX = -1;
@@ -54,6 +62,7 @@
 
 <div class="image" class:loading={$loading}>
   <img class="image-image" {src} {alt} style:--offset-x={imageOffsetX} on:load={onImageLoaded} />
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class="image-overlay"
     on:click|preventDefault={onImageOverlayClicked}
