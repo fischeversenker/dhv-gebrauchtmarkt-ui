@@ -121,7 +121,7 @@
 </script>
 
 <svelte:head>
-  <title>Home</title>
+  <title>DHV Gebrauchtmarkt 2.0</title>
 </svelte:head>
 
 <div>
