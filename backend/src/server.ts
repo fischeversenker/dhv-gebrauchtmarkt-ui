@@ -1,5 +1,7 @@
-import { Application, oakCors } from './deps.ts';
+import { Application, loadEnvVars, oakCors } from './deps.ts';
 import { router } from './routes.ts';
+
+loadEnvVars({ export: true });
 
 const app = new Application();
 
