@@ -1,4 +1,4 @@
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { writable, type Readable, type Unsubscriber, type Writable } from 'svelte/store';
 import type { OfferPreview } from '@types';
 
@@ -16,23 +16,32 @@ export const itemsPerPage = writable(6);
 
 export const indexScrollTop = writable(0);
 
-export const notification = writable<{ type: 'success' | 'error' | 'info' | 'warning', message: string, duration?: number, callback?: () => void } | null>(null);
+export const notification = writable<{
+	type: 'success' | 'error' | 'info' | 'warning';
+	message: string;
+	duration?: number;
+	callback?: () => void;
+} | null>(null);
 
 export const FIRST_TIME_VISITOR_STORAGE_KEY = 'firstTimeVisitor';
-const localStorageFirstTimeVisitor = (browser && localStorage.getItem(FIRST_TIME_VISITOR_STORAGE_KEY)) || null;
+const localStorageFirstTimeVisitor =
+	(browser && localStorage.getItem(FIRST_TIME_VISITOR_STORAGE_KEY)) || null;
 export const firstTimeVisitor = writable<boolean>(localStorageFirstTimeVisitor === null);
 
 export const REACTED_TO_NOTIFICATION_REQUEST_KEY = 'reactedToNotificationRequest';
-const localStorageReactedToNotificationRequest = (browser && localStorage.getItem(REACTED_TO_NOTIFICATION_REQUEST_KEY)) || null;
-export const reactedToNotificationRequest = writable<boolean>(localStorageReactedToNotificationRequest === 'true');
+const localStorageReactedToNotificationRequest =
+	(browser && localStorage.getItem(REACTED_TO_NOTIFICATION_REQUEST_KEY)) || null;
+export const reactedToNotificationRequest = writable<boolean>(
+	localStorageReactedToNotificationRequest === 'true'
+);
 
 export function subscribeButSkipFirst<T>(
-  store: Writable<T> | Readable<T>,
-  callback: (value: T) => void
+	store: Writable<T> | Readable<T>,
+	callback: (value: T) => void
 ): Unsubscriber {
-  let first = true;
-  return store.subscribe(function (value) {
-    if (!first) callback(value);
-    first = false;
-  });
+	let first = true;
+	return store.subscribe(function (value) {
+		if (!first) callback(value);
+		first = false;
+	});
 }

@@ -1,28 +1,17 @@
-import adapter from '@sveltejs/adapter-static';
-import preprocess from 'svelte-preprocess';
+import adapter from '@sveltejs/adapter-netlify';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  // Consult https://github.com/sveltejs/svelte-preprocess
-  // for more information about preprocessors
-  preprocess: preprocess(),
+	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
+	// for more information about preprocessors
+	preprocess: vitePreprocess(),
 
-  kit: {
-    adapter: adapter({
-      fallback: 'index.html'
-    }),
-
-    // Override http methods in the Todo forms
-    methodOverride: {
-      allowed: ['PATCH', 'DELETE']
-    },
-    // remove this once @pusher/push-notifications-web ships as proper ESM module
-    vite: {
-      ssr: {
-        noExternal: ['@pusher/push-notifications-web'],
-      }
-    }
-  }
+	kit: {
+		adapter: adapter({
+			edge: false
+		})
+	}
 };
 
 export default config;
