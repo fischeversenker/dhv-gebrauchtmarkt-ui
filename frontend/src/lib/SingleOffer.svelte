@@ -126,7 +126,7 @@
         href={offer.musterData.databaseUrl}
         title="DHV Musterprüfung"
         target="_blank"
-        rel="noopener"
+        rel="noreferrer"
       >
         In DHV-Gerätedatenbank anzeigen
       </a>
@@ -165,7 +165,7 @@
 
   <div class="block">
     <div class="button is-primary is-fullwidth mb-4" on:click={() => ($showContactForm = true)}>Anbieter kontaktieren</div>
-    <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank">Im DHV-Gebrauchtmarkt anzeigen</a>
+    <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank" rel="noreferrer">Im DHV-Gebrauchtmarkt anzeigen</a>
   </div>
 
   {#if $showImageModal}
