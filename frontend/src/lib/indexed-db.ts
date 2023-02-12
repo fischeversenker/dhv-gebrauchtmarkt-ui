@@ -10,7 +10,7 @@ export function connectToIndexedDb() {
   return new Promise<void>((resolve, reject) => {
     const request = indexedDB.open('offersDatabase', 2);
 
-    request.onsuccess = function (event: Event) {
+    request.onsuccess = function () {
       db = request.result;
       resolve();
     };

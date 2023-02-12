@@ -9,7 +9,7 @@
   let message = '';
   let sendToMe = true;
 
-  function onSubmit(event: SubmitEvent | MouseEvent) {
+  function onSubmit() {
     dispatch('submit', {
       name,
       email,
