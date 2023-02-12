@@ -19,7 +19,7 @@
   } from '$lib/store';
   import { getOffers } from '$lib/offers';
   import FilterBar from '$lib/FilterBar.svelte';
-  import InifinityLoadingFooter from '$lib/InfinityLoadingFooter.svelte';
+  import InfinityLoadingFooter from '$lib/InfinityLoadingFooter.svelte';
   import OfferList from '$lib/OfferList.svelte';
 
   let unsubscribeSelectedCategory: Unsubscriber;
@@ -123,7 +123,7 @@
 <template>
   <OfferList offers={$offers} />
 
-  <InifinityLoadingFooter />
+  <InfinityLoadingFooter />
 
   <FilterBar />
 </template>
