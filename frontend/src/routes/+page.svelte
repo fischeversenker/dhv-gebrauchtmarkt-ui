@@ -103,11 +103,14 @@
     $initialOffersGotLoaded = true;
 
     if (!$reactedToNotificationRequest) {
-      $notification = {
-        message: 'Erhalte Benachrichtigungen wenn es neue Angebote gibt 🔔<br>Tippe hier!',
-        type: 'info',
-        callback: () => subscribeToNewOffers()
-      };
+      // TODO: re-activate notifications
+      // currently they are switched off because they are annoying
+      // and there is no way to stop getting them (except for manually navigating to /stop)
+      //   $notification = {
+      //     message: 'Erhalte Benachrichtigungen wenn es neue Angebote gibt 🔔<br>Tippe hier!',
+      //     type: 'info',
+      //     callback: () => subscribeToNewOffers()
+      //   };
     }
   });
 
