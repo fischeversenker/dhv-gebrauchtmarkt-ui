@@ -1,4 +1,7 @@
 {
+  "tasks": {
+    "dev": "deno run -A --watch backend/src/server.ts"
+  },
   "lint": {
     "files": {
       "include": ["backend/"]

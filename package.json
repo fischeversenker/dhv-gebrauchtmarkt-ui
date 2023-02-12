@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:frontend": "live-server src",
-    "start:backend": "deno run --allow-net --watch backend/src/server.ts",
+    "start:frontend": "yarn --cwd frontend dev",
+    "start:backend": "deno task dev",
     "prepare": "git config core.hooksPath ./.hooks"
   },
   "lint-staged": {
@@ -15,7 +15,6 @@
     ]
   },
   "devDependencies": {
-    "lint-staged": "^12.4.0",
-    "live-server": "^1.2.1"
+    "lint-staged": "^12.4.0"
   }
 }
