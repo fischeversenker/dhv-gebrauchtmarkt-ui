@@ -10,10 +10,7 @@ const { signal } = controller;
 
 app.addEventListener('listen', ({ hostname, port, secure }) => {
   console.log(
-    `Listening on: ${secure ? 'https://' : 'http://'}${
-      hostname ??
-        'localhost'
-    }:${port}`,
+    `Listening on: ${secure ? 'https://' : 'http://'}${hostname ?? 'localhost'}:${port}`,
   );
 });
 
@@ -32,10 +29,17 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set('X-Response-Time', `${ms}ms`);
 });
 
-app.use(oakCors({
-  origin: ['http://localhost:3000', 'https://dhv-gebrauchtmarkt-ui.netlify.app'],
-  credentials: true,
-}));
+app.use(
+  oakCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:4173',
+      'https://dhv-gebrauchtmarkt-ui.netlify.app',
+    ],
+    credentials: true,
+  }),
+);
 
 app.use(router.routes());
 app.use(router.allowedMethods());
