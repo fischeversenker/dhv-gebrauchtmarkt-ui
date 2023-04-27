@@ -4,6 +4,7 @@ import type { OfferPreview } from '@types';
 
 export const isLoading = writable(false);
 export const isLoadingMore = writable(false);
+export const shouldInfinityScroll = writable(true);
 
 export const offers = writable<OfferPreview[]>([]);
 export const initialOffersGotLoaded = writable(false);
@@ -15,6 +16,8 @@ export const filterCategory = writable(0);
 export const itemsPerPage = writable(6);
 
 export const indexScrollTop = writable(0);
+
+export const user = writable<string>();
 
 export const notification = writable<{
   type: 'success' | 'error' | 'info' | 'warning';

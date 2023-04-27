@@ -5,6 +5,7 @@
   import Notification from '$lib/Notification.svelte';
   import FirstTimeVisitorModal from '$lib/FirstTimeVisitorModal.svelte';
   import { clearPendingNotifications, connectToIndexedDb } from '$lib/indexed-db';
+  import Header from '$lib/Header.svelte';
 
   let worker: ServiceWorker | null = null;
 
@@ -31,6 +32,8 @@
 </svelte:head>
 
 <main>
+  <Header />
+
   <slot />
 
   <FirstTimeVisitorModal />

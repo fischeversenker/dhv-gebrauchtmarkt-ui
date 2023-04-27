@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { getOffers } from './offers';
-  import { initialOffersGotLoaded, isLoadingMore, itemsPerPage, notification, offers, offersOffset } from './store';
+  import { initialOffersGotLoaded, isLoadingMore, itemsPerPage, notification, offers, offersOffset, shouldInfinityScroll } from './store';
 
   let footer: HTMLElement;
   let lastTrigger = Date.now();
@@ -37,7 +37,9 @@
 
   onMount(() => {
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      if (entries[0]?.intersectionRatio >= 0.2) loadMoreOffers();
+      if (entries[0]?.intersectionRatio >= 0.2 && $shouldInfinityScroll) {
+        loadMoreOffers();
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, { threshold: 0.2 });
