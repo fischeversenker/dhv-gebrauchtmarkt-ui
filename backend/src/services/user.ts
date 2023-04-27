@@ -70,3 +70,10 @@ function extractLoginToken(htmlContent: string) {
 
   return loginToken[1];
 }
+
+export function logout(sessionId: string) {
+  return request('https://www.dhv.de/db3/service/gebrauchtmarkt/abmelden', {
+    method: 'GET',
+    sessionId,
+  });
+}
