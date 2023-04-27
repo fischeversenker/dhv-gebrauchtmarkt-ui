@@ -125,9 +125,18 @@
 </svelte:head>
 
 <div>
-  <OfferList offers={$offers} />
+  <section class="section">
+    <OfferList offers={$offers} />
+  </section>
 
   <InfinityLoadingFooter />
 
   <FilterBar />
 </div>
+
+<style>
+  .section {
+    padding-inline: 0.7rem;
+    padding-top: 1.5rem;
+  }
+</style>

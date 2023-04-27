@@ -7,29 +7,27 @@
   export let offers: OfferPreview[];
 </script>
 
-<section class="section">
-  <div class="grid">
-    {#each offers as offer (offer.id)}
-      <div in:blur={{ duration: 200, amount: 20 }}>
-        <OfferPreviewCard {offer} />
-      </div>
-    {:else}
-      {#if $isLoading}
-        <div in:fade>
-          <progress class="progress is-info" max="100">0%</progress>
-        </div>
-      {:else if $initialOffersGotLoaded}
-        <div class="notification is-info">Zu deiner Suche wurden keine Angebote gefunden. Bitte passe die Filter an.</div>
-      {/if}
-    {/each}
-
-    {#if $isLoadingMore}
+<div class="grid">
+  {#each offers as offer (offer.id)}
+    <div in:blur={{ duration: 200, amount: 20 }}>
+      <OfferPreviewCard {offer} />
+    </div>
+  {:else}
+    {#if $isLoading}
       <div in:fade>
         <progress class="progress is-info" max="100">0%</progress>
       </div>
+    {:else if $initialOffersGotLoaded}
+      <div class="notification is-info">Zu deiner Suche wurden keine Angebote gefunden. Bitte passe die Filter an.</div>
     {/if}
-  </div>
-</section>
+  {/each}
+
+  {#if $isLoadingMore}
+    <div in:fade>
+      <progress class="progress is-info" max="100">0%</progress>
+    </div>
+  {/if}
+</div>
 
 <style>
   .grid {

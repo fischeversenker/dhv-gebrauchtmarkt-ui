@@ -28,3 +28,10 @@
     <SingleOffer offer={data.offer} />
   {/if}
 </section>
+
+<style>
+  .section {
+    padding-inline: 0.7rem;
+    padding-top: 1.5rem;
+  }
+</style>
