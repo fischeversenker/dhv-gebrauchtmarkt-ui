@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { filterCategory, filterSearchString, isLoading, itemsPerPage } from './store';
+import { filterCategory, filterSearchString, isLoading, itemsPerPage, myOffers } from './store';
 import type { OfferPreview, Offer } from '@types';
 import { addSeenOffer } from './indexed-db';
 
@@ -63,6 +63,7 @@ export async function getMyOffers(): Promise<OfferPreview[]> {
     credentials: 'include'
   }).then((res) => res.json())) as OfferPreview[];
   isLoading.set(false);
+  myOffers.update((existingOffers) => (receivedOffers.forEach((offer) => existingOffers.add(offer.id)), existingOffers));
 
   return receivedOffers.map((offer: OfferPreview) => {
     return {

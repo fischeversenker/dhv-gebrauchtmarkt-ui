@@ -3,7 +3,7 @@
   import { fade } from 'svelte/transition';
   import { contactOffer, type ContactFormResult } from './offers';
   import type { Offer } from '@types';
-  import { notification } from './store';
+  import { myOffers, notification } from './store';
   import ContactForm from './ContactForm.svelte';
   import GalleryImage from './GalleryImage.svelte';
   import { onDestroy, onMount } from 'svelte';
@@ -16,6 +16,8 @@
   let showContactForm = writable(false);
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
+
+  const isMyOffer = $myOffers.has(offer.id);
 
   function onShowNextImage() {
     $imageIndex = ($imageIndex + 1) % offer.imageUrls.length;
@@ -164,7 +166,9 @@
   </div>
 
   <div class="block">
-    <div class="button is-primary is-fullwidth mb-4" on:click={() => ($showContactForm = true)}>Anbieter kontaktieren</div>
+    {#if !isMyOffer}
+      <div class="button is-primary is-fullwidth mb-4" on:click={() => ($showContactForm = true)}>Anbieter kontaktieren</div>
+    {/if}
     <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank" rel="noreferrer">Im DHV-Gebrauchtmarkt anzeigen</a>
   </div>
 

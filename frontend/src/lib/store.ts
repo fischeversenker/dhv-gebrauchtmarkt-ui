@@ -19,6 +19,8 @@ export const indexScrollTop = writable(0);
 
 export const user = writable<string | null>(null);
 
+export const myOffers = writable<Set<number>>(new Set());
+
 export const notification = writable<{
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;
