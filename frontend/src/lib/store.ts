@@ -7,7 +7,7 @@ export const isLoadingMore = writable(false);
 export const shouldInfinityScroll = writable(true);
 
 export const offers = writable<OfferPreview[]>([]);
-export const initialOffersGotLoaded = writable(false);
+export const homeOffersGotLoaded = writable(false);
 export const offersOffset = writable(0);
 
 export const filterSearchString = writable('');
@@ -17,7 +17,7 @@ export const itemsPerPage = writable(6);
 
 export const indexScrollTop = writable(0);
 
-export const user = writable<string>();
+export const user = writable<string | null>(null);
 
 export const notification = writable<{
   type: 'success' | 'error' | 'info' | 'warning';

@@ -1,17 +1,31 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { getMyOffers } from '$lib/offers';
-  import type { OfferPreview } from '@types';
+  import { goto } from '$app/navigation';
   import OfferList from '$lib/OfferList.svelte';
-
-  let offers: OfferPreview[] = [];
+  import { getMyOffers } from '$lib/offers';
+  import { homeOffersGotLoaded, offers, shouldInfinityScroll, user } from '$lib/store';
+  import { onDestroy, onMount } from 'svelte';
 
   onMount(async () => {
+    $offers = [];
+    if (!$user) {
+      offers.set([]);
+      goto('/');
+    }
+
+    $shouldInfinityScroll = false;
+
     window.scrollTo({ top: 0 });
-    offers = await getMyOffers().catch((error) => {
+    const myOffers = await getMyOffers().catch((error) => {
       console.warn(error);
       return [];
     });
+    offers.set(myOffers);
+  });
+
+  onDestroy(async () => {
+    $offers = [];
+    $homeOffersGotLoaded = false;
+    $shouldInfinityScroll = true;
   });
 </script>
 
@@ -19,17 +33,13 @@
   <title>Meine Angebote</title>
 </svelte:head>
 
-<template>
-  <section class="section">
-    <div class="block">
-      <a href="/">
-        <span class="icon is-small">
-          <i class="fa-solid fa-left-long" aria-hidden="true" />
-        </span>
-        <span>Zurück</span>
-      </a>
-    </div>
+<section class="section">
+  <OfferList offers={$offers} />
+</section>
 
-    <OfferList {offers} />
-  </section>
-</template>
+<style>
+  .section {
+    padding-inline: 0.7rem;
+    padding-top: 1.5rem;
+  }
+</style>

@@ -1,26 +1,27 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte';
-  import type { Unsubscriber } from 'svelte/store';
   import { browser } from '$app/environment';
-  import { beforeNavigate, afterNavigate } from '$app/navigation';
-  import { Client } from '@pusher/push-notifications-web';
-  import { debounce } from 'lodash-es';
-  import {
-    offers,
-    filterCategory,
-    initialOffersGotLoaded,
-    offersOffset,
-    filterSearchString,
-    subscribeButSkipFirst,
-    indexScrollTop,
-    notification,
-    reactedToNotificationRequest,
-    REACTED_TO_NOTIFICATION_REQUEST_KEY
-  } from '$lib/store';
-  import { getOffers } from '$lib/offers';
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import FilterBar from '$lib/FilterBar.svelte';
   import InfinityLoadingFooter from '$lib/InfinityLoadingFooter.svelte';
   import OfferList from '$lib/OfferList.svelte';
+  import { getOffers } from '$lib/offers';
+  import {
+    REACTED_TO_NOTIFICATION_REQUEST_KEY,
+    filterCategory,
+    filterSearchString,
+    homeOffersGotLoaded,
+    indexScrollTop,
+    notification,
+    offers,
+    offersOffset,
+    reactedToNotificationRequest,
+    shouldInfinityScroll,
+    subscribeButSkipFirst
+  } from '$lib/store';
+  import { Client } from '@pusher/push-notifications-web';
+  import { debounce } from 'lodash-es';
+  import { onDestroy, onMount } from 'svelte';
+  import type { Unsubscriber } from 'svelte/store';
 
   let unsubscribeSelectedCategory: Unsubscriber;
   let unsubscribeFilterSearchString: Unsubscriber;
@@ -97,10 +98,10 @@
   }
 
   onMount(async () => {
-    if ($initialOffersGotLoaded) return;
+    if ($homeOffersGotLoaded) return;
 
     $offers = await getOffers($offersOffset);
-    $initialOffersGotLoaded = true;
+    $homeOffersGotLoaded = true;
 
     if (!$reactedToNotificationRequest) {
       // TODO: re-activate notifications

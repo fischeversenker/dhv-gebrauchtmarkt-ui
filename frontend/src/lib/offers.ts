@@ -57,7 +57,7 @@ export async function getOffer(id: number): Promise<Offer> {
   };
 }
 
-export async function getMyOffers() {
+export async function getMyOffers(): Promise<OfferPreview[]> {
   isLoading.set(true);
   const receivedOffers = (await fetch(`${import.meta.env.VITE_API_BASE}/offers/mine`, {
     credentials: 'include'

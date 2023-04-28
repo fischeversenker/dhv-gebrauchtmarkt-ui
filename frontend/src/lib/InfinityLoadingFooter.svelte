@@ -2,7 +2,7 @@
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { getOffers } from './offers';
-  import { initialOffersGotLoaded, isLoadingMore, itemsPerPage, notification, offers, offersOffset, shouldInfinityScroll } from './store';
+  import { homeOffersGotLoaded, isLoadingMore, itemsPerPage, notification, offers, offersOffset, shouldInfinityScroll } from './store';
 
   let footer: HTMLElement;
   let lastTrigger = Date.now();
@@ -43,7 +43,7 @@
     };
 
     const observer = new IntersectionObserver(observerCallback, { threshold: 0.2 });
-    unsubscribeInitialOffersGotLoaded = initialOffersGotLoaded.subscribe((gotLoaded) => {
+    unsubscribeInitialOffersGotLoaded = homeOffersGotLoaded.subscribe((gotLoaded) => {
       if (gotLoaded) observer.observe(footer);
     });
   });
