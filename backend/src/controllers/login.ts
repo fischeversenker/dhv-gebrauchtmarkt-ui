@@ -20,6 +20,7 @@ export const loginRouter = new Router()
         await context.cookies.set('dhvsid', newSessionId, {
           sameSite: 'none',
           httpOnly: true,
+          secure: !context.request.url.host.includes('localhost'),
         });
       } catch (_) {
         context.response.body = 'ERROR';
