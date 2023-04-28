@@ -46,7 +46,11 @@ app.use(
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const listenPromise = app.listen({ port: 8000, signal });
+const listenPromise = app.listen({
+  port: 8000,
+  signal,
+  secure: Deno.env.get('PRODUCTION') === 'true',
+});
 
 // In order to close the sever...
 // controller.abort();

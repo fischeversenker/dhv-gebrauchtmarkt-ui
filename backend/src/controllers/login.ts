@@ -18,11 +18,12 @@ export const loginRouter = new Router()
         const newSessionId = await login(uid, pwd, sessionId);
         context.response.body = 'OK';
         await context.cookies.set('dhvsid', newSessionId, {
-          sameSite: 'none',
           httpOnly: true,
-          secure: !context.request.url.host.includes('localhost'),
+          sameSite: 'none',
+          secure: Deno.env.get('PRODUCTION') === 'true',
         });
-      } catch (_) {
+      } catch (e) {
+        console.debug(`Error during login:`, e);
         context.response.body = 'ERROR';
         context.response.status = 400;
       }
