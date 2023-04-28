@@ -21,9 +21,14 @@ export const offersRouter = new Router()
       'https://www.dhv.de/db3/service/gebrauchtmarkt/meineanzeigen',
       { sessionId },
     ).then((response) => response.json());
-    const offersRawHtml = meineAnzeigen.content;
-    const offers = collectOfferPreviews(offersRawHtml);
-    context.response.body = offers;
+    const offersRawHtml = meineAnzeigen.content as string;
+    if (offersRawHtml.includes('gm_login_box')) {
+      context.response.body = 'NOT LOGGED IN';
+      context.response.status = 401;
+    } else {
+      const offers = collectOfferPreviews(offersRawHtml);
+      context.response.body = offers;
+    }
   })
   .get('/:id', async (context) => {
     const id = context.params.id;

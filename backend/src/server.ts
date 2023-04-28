@@ -9,8 +9,8 @@ const controller = new AbortController();
 const { signal } = controller;
 
 app.addEventListener('listen', ({ hostname, port, secure }) => {
-  console.log(
-    `Listening on: ${secure ? 'https://' : 'http://'}${hostname ?? 'localhost'}:${port}`,
+  console.info(
+    `[INFO] Listening on: ${secure ? 'https://' : 'http://'}${hostname ?? 'localhost'}:${port}`,
   );
 });
 
@@ -18,8 +18,8 @@ app.addEventListener('listen', ({ hostname, port, secure }) => {
 app.use(async (ctx, next) => {
   await next();
   const rt = ctx.response.headers.get('X-Response-Time');
-  console.log(
-    `[${ctx.response.status}] ${ctx.request.method} ${ctx.request.url} - ${rt}`,
+  console.info(
+    `[INFO] [${ctx.response.status}] ${ctx.request.method} ${ctx.request.url} - ${rt}`,
   );
 });
 

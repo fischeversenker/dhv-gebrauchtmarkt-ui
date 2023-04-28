@@ -14,6 +14,8 @@ export async function request(
   const body = options.body ?? null;
   const sessionId = options.sessionId ?? null;
 
+  console.debug(`[DEBUG] requesting "${url}" with sessionId "${sessionId}"`);
+
   headers.append('Origin', 'https://www.dhv.de');
   headers.append('Referer', 'https://www.dhv.de/');
   headers.append('Cookie', `dhvsid=${sessionId}`);
@@ -26,6 +28,7 @@ export async function request(
     cache: 'no-cache',
     redirect: 'follow',
   };
-
-  return await fetch(url, requestOptions);
+  const response = await fetch(url, requestOptions);
+  console.debug(`[DEBUG] response for ${url}: ${response.status}`);
+  return response;
 }
