@@ -6,7 +6,11 @@ export const logoutRouter = new Router().get('/', async (context) => {
 
   if (!sessionId || (await isUserLoggedIn(sessionId))) {
     context.response.body = 'OK';
-    await context.cookies.set('dhvsid', null);
+    await context.cookies.set('dhvsid', null, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: Deno.env.get('PRODUCTION') === 'true',
+    });
     return;
   }
 
