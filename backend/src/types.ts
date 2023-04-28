@@ -14,6 +14,8 @@ export interface CommonOfferProperties {
     city?: string;
   };
   postedDate: Date;
+  unpublished?: boolean;
+  expired?: boolean;
 }
 
 export interface OfferPreview extends CommonOfferProperties {

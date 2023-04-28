@@ -60,12 +60,21 @@ function commonOfferPropertiesFromOfferElement(
 }
 
 function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
-  const thumbnailUrl = offerElement.querySelector('.gm_offer_image img')?.getAttribute('src')!.replace(
-    '/thumbnail/',
-    '/medium/',
-  )!;
-  const descriptionElement = offerElement.querySelector('.gm_offer_description');
-  const shortDescription = descriptionElement?.querySelector('.bodytext')?.innerHTML.trim()!;
+  const thumbnailUrl = offerElement
+    .querySelector('.gm_offer_image img')
+    ?.getAttribute('src')!
+    .replace('/thumbnail/', '/medium/')!;
+  const descriptionElement = offerElement.querySelector(
+    '.gm_offer_description',
+  );
+  const expired = descriptionElement?.classList.has('unsichtbar');
+  const unpublished = offerElement
+    .querySelector('.gm_offer_gm_price')
+    ?.classList.has('unveroeffentlicht');
+
+  const shortDescription = descriptionElement
+    ?.querySelector('.bodytext')
+    ?.innerHTML.trim()!;
 
   const rawTitle = descriptionElement?.querySelector('h2')?.textContent!;
   let title = rawTitle;
@@ -74,7 +83,9 @@ function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
     title = title.split('|')[0].trim();
     subtitle = rawTitle.split('|')[1].trim();
   }
-  const url = offerElement.querySelector('.gm_offer_btn')?.getAttribute('href')!;
+  const url = offerElement
+    .querySelector('.gm_offer_btn')
+    ?.getAttribute('href')!;
   const id = Number(url.match(/\/id\/(\d+)/)![1]);
 
   const commonOfferProperties = commonOfferPropertiesFromOfferElement(offerElement);
@@ -86,6 +97,8 @@ function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
     subtitle,
     thumbnailUrl,
     shortDescription,
+    expired,
+    unpublished,
     url: `https://www.dhv.de${url}`,
   };
 }
@@ -101,7 +114,12 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     throw new Error('couldn\'t find offer element');
   }
 
-  const commonOfferProperties = commonOfferPropertiesFromOfferElement(offerElement as Element);
+  const expired = rawHtml.includes('Diese Anzeige ist bereits ausgelaufen');
+  const unpublished = rawHtml.includes('Anzeige ist nicht veröffentlicht');
+
+  const commonOfferProperties = commonOfferPropertiesFromOfferElement(
+    offerElement as Element,
+  );
 
   const descriptionElement = offerElement.querySelector('.gm_offer_bodytext');
   const description = descriptionElement?.innerHTML.trim()!;
@@ -119,35 +137,51 @@ export function collectOffer(rawHtml: string, id: string): Offer {
   let thumbnailUrls: string[] = [];
   let imageUrls: string[] = [];
   if (imageLinkNodes) {
-    imageUrls = Array.from(imageLinkNodes).map((imageLink) => (imageLink as Element).getAttribute('href')!);
-    thumbnailUrls = Array.from(imageLinkNodes).map((imageLink) =>
-      (imageLink as Element).querySelector('img')!.getAttribute('src')!
+    imageUrls = Array.from(imageLinkNodes).map(
+      (imageLink) => (imageLink as Element).getAttribute('href')!,
+    );
+    thumbnailUrls = Array.from(imageLinkNodes).map(
+      (imageLink) => (imageLink as Element).querySelector('img')!.getAttribute('src')!,
     );
   }
 
   const musterDataElement = offerElement.querySelector('.gm_offer_musterdaten');
   let musterData: MusterData | undefined = undefined;
   if (musterDataElement) {
-    const rawDatabaseUrl = musterDataElement?.querySelector('.gm_offer_musterlink > a')?.getAttribute('href')!;
+    const rawDatabaseUrl = musterDataElement
+      ?.querySelector('.gm_offer_musterlink > a')
+      ?.getAttribute('href')!;
     const rawNormDataStrongElements = musterDataElement?.querySelectorAll('div > strong');
-    const rawNormDataElements = Array.from(rawNormDataStrongElements).map((rawNormDataStrongElement) => {
-      const label = rawNormDataStrongElement.textContent.trim();
-      const parentElement = (rawNormDataStrongElement as Element).parentElement!;
-      parentElement?.removeChild(rawNormDataStrongElement);
-      const value = parentElement.textContent.trim();
-      return { label, value };
-    });
+    const rawNormDataElements = Array.from(rawNormDataStrongElements).map(
+      (rawNormDataStrongElement) => {
+        const label = rawNormDataStrongElement.textContent.trim();
+        const parentElement = (rawNormDataStrongElement as Element)
+          .parentElement!;
+        parentElement?.removeChild(rawNormDataStrongElement);
+        const value = parentElement.textContent.trim();
+        return { label, value };
+      },
+    );
 
-    const norm = rawNormDataElements.find((rawNormDataElement) => rawNormDataElement.label === 'Norm:');
-    const certifier = rawNormDataElements.find((rawNormDataElement) => rawNormDataElement.label === 'Prüfstelle:');
-    const classification = rawNormDataElements.find((rawNormDataElement) =>
-      rawNormDataElement.label === 'Klassifizierung:'
+    const norm = rawNormDataElements.find(
+      (rawNormDataElement) => rawNormDataElement.label === 'Norm:',
     );
-    const rawTakeoffWeight = rawNormDataElements.find((rawNormDataElement) =>
-      rawNormDataElement.label === 'Startgewicht'
+    const certifier = rawNormDataElements.find(
+      (rawNormDataElement) => rawNormDataElement.label === 'Prüfstelle:',
     );
-    const takeoffWeightMatches = rawTakeoffWeight?.value.match(/von: (\d+) kg bis: (\d+) kg/);
-    const takeoffWeight = { from: Number(takeoffWeightMatches?.[1]), to: Number(takeoffWeightMatches?.[2]) };
+    const classification = rawNormDataElements.find(
+      (rawNormDataElement) => rawNormDataElement.label === 'Klassifizierung:',
+    );
+    const rawTakeoffWeight = rawNormDataElements.find(
+      (rawNormDataElement) => rawNormDataElement.label === 'Startgewicht',
+    );
+    const takeoffWeightMatches = rawTakeoffWeight?.value.match(
+      /von: (\d+) kg bis: (\d+) kg/,
+    );
+    const takeoffWeight = {
+      from: Number(takeoffWeightMatches?.[1]),
+      to: Number(takeoffWeightMatches?.[2]),
+    };
 
     musterData = {
       databaseUrl: rawDatabaseUrl ? `https://dhv.de${rawDatabaseUrl}` : undefined,
@@ -164,6 +198,8 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     title,
     subtitle,
     thumbnailUrls,
+    unpublished,
+    expired,
     imageUrls,
     description,
     musterData,
