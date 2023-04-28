@@ -17,7 +17,10 @@ export const loginRouter = new Router()
       try {
         const newSessionId = await login(uid, pwd, sessionId);
         context.response.body = 'OK';
-        await context.cookies.set('dhvsid', newSessionId);
+        await context.cookies.set('dhvsid', newSessionId, {
+          sameSite: 'none',
+          httpOnly: true,
+        });
       } catch (_) {
         context.response.body = 'ERROR';
         context.response.status = 400;
