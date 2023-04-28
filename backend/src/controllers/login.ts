@@ -13,8 +13,14 @@ export const loginRouter = new Router()
       }
       const formData = await body.value.read();
       const { uid, pwd } = formData.fields;
-      const newSessionId = await login(uid, pwd, sessionId);
-      context.response.body = 'OK';
-      await context.cookies.set('dhvsid', newSessionId);
+
+      try {
+        const newSessionId = await login(uid, pwd, sessionId);
+        context.response.body = 'OK';
+        await context.cookies.set('dhvsid', newSessionId);
+      } catch (_) {
+        context.response.body = 'ERROR';
+        context.response.status = 400;
+      }
     }
   });
