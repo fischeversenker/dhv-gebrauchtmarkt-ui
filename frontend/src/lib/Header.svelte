@@ -4,6 +4,7 @@
   import { fade } from 'svelte/transition';
   import LoginForm from './LoginForm.svelte';
   import { user } from './store';
+  import { goto } from '$app/navigation';
 
   let showLoginForm = false;
   let isAtHome = derived(page, ($page) => $page.route.id === '/' || $page.route.id === '/offers/mine');
@@ -14,6 +15,7 @@
       credentials: 'include'
     });
     $user = null;
+    goto('/');
   }
 </script>
 
