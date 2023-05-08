@@ -49,7 +49,7 @@ app.use(router.allowedMethods());
 const listenPromise = app.listen({
   port: 8000,
   signal,
-  secure: Deno.env.get('PRODUCTION') === 'true',
+  secure: true,
 });
 
 // In order to close the sever...

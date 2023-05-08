@@ -20,7 +20,7 @@ export const loginRouter = new Router()
         await context.cookies.set('dhvsid', newSessionId, {
           httpOnly: true,
           sameSite: 'none',
-          secure: Deno.env.get('PRODUCTION') === 'true',
+          secure: true,
         });
       } catch (e) {
         console.debug(`Error during login:`, e);

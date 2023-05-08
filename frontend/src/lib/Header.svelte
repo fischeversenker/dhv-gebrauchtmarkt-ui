@@ -5,6 +5,7 @@
   import LoginForm from './LoginForm.svelte';
   import { user } from './store';
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
 
   let showLoginForm = false;
   let isAtHome = derived(page, ($page) => $page.route.id === '/' || $page.route.id === '/offers/mine');
@@ -17,6 +18,15 @@
     $user = null;
     goto('/');
   }
+
+  onMount(async () => {
+    const loginResponse = await fetch(`${import.meta.env.VITE_API_BASE}/user`, {
+      credentials: 'include'
+    });
+    if (loginResponse.ok) {
+      $user = (await loginResponse.json()).username;
+    }
+  });
 </script>
 
 <nav class="navbar is-light has-shadow">

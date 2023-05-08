@@ -13,6 +13,15 @@ export async function isUserLoggedIn(sessionId?: string) {
   return loginFormContent.user?.loggedIn ?? false;
 }
 
+export async function getLoggedInUser(sessionId: string) {
+  const loginFormContent = await getLoginFormResponse(sessionId);
+  if (loginFormContent.user) {
+    return loginFormContent.user;
+  }
+
+  throw new Error('no logged in user');
+}
+
 export async function login(
   uid: string,
   pwd: string,

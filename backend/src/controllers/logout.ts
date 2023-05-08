@@ -9,7 +9,7 @@ export const logoutRouter = new Router().get('/', async (context) => {
     await context.cookies.set('dhvsid', null, {
       httpOnly: true,
       sameSite: 'none',
-      secure: Deno.env.get('PRODUCTION') === 'true',
+      secure: true,
     });
     return;
   }
