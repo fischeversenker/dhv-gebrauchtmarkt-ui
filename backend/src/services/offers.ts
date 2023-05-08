@@ -67,8 +67,8 @@ function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
   const descriptionElement = offerElement.querySelector(
     '.gm_offer_description',
   );
-  const expired = descriptionElement?.classList.has('unsichtbar');
-  const unpublished = offerElement
+  const isExpired = descriptionElement?.classList.has('unsichtbar');
+  const isPublic = !offerElement
     .querySelector('.gm_offer_gm_price')
     ?.classList.has('unveroeffentlicht');
 
@@ -97,8 +97,8 @@ function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
     subtitle,
     thumbnailUrl,
     shortDescription,
-    expired,
-    unpublished,
+    isExpired,
+    isPublic,
     url: `https://www.dhv.de${url}`,
   };
 }
@@ -114,8 +114,8 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     throw new Error('couldn\'t find offer element');
   }
 
-  const expired = rawHtml.includes('Diese Anzeige ist bereits ausgelaufen');
-  const unpublished = rawHtml.includes('Anzeige ist nicht veröffentlicht');
+  const isExpired = rawHtml.includes('Diese Anzeige ist bereits ausgelaufen');
+  const isPublic = !rawHtml.includes('Anzeige ist nicht veröffentlicht');
 
   const commonOfferProperties = commonOfferPropertiesFromOfferElement(
     offerElement as Element,
@@ -198,8 +198,8 @@ export function collectOffer(rawHtml: string, id: string): Offer {
     title,
     subtitle,
     thumbnailUrls,
-    unpublished,
-    expired,
+    isPublic,
+    isExpired,
     imageUrls,
     description,
     musterData,

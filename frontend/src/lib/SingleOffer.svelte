@@ -18,6 +18,7 @@
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 
   const isMyOffer = $myOffers.has(offer.id);
+  const showSubtitle = offer.subtitle || offer.isExpired || !offer.isPublic;
 
   function onShowNextImage() {
     $imageIndex = ($imageIndex + 1) % offer.imageUrls.length;
@@ -83,7 +84,12 @@
 
 <div>
   <div class="block">
-    <p class="title is-4">{offer.title}</p>
+    <p class="title is-4">
+      {#if !offer.isPublic || offer.isExpired}
+        <i class="fa-solid fa-eye-slash" />
+      {/if}
+      {offer.title}
+    </p>
     {#if offer.subtitle}
       <p class="subtitle has-text-grey is-6">
         {offer.subtitle}

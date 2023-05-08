@@ -3,10 +3,11 @@
 
   export let offer: OfferPreview;
 
+  const showSubtitle = offer.subtitle || offer.isExpired || !offer.isPublic;
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 </script>
 
-<a href={offer.path} sveltekit:noscroll>
+<a href={offer.path}>
   <div class="card">
     <div class="card-image">
       <figure class="image is-1by1">
@@ -15,10 +16,17 @@
     </div>
 
     <div class="card-content">
-      <p class="title is-5">{offer.title}</p>
-      {#if offer.subtitle}
+      <p class="title is-5">
+        {offer.title}
+      </p>
+      {#if showSubtitle}
         <p class="subtitle has-text-grey is-6">
-          {offer.subtitle}
+          {#if !offer.isPublic || offer.isExpired}
+            <i class="fa-solid fa-eye-slash" />
+          {/if}
+          {#if offer.subtitle}
+            {offer.subtitle}
+          {/if}
         </p>
       {/if}
 
