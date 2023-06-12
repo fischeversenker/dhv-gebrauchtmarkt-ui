@@ -30,11 +30,11 @@
 </script>
 
 <nav class="navbar is-light has-shadow">
-  <div class="navbar-menu is-active">
+  <div class="navbar-menu py-0">
     <div class="navbar-start">
       {#if !$isAtHome}
         <div class="navbar-item">
-          <a class="button" href="/">
+          <a class="button is-info is-light" href="/">
             <span class="icon is-small">
               <i class="fa-solid fa-arrow-left" aria-hidden="true" />
             </span>
@@ -80,7 +80,7 @@
 
 <style>
   .navbar-menu {
-    min-height: 72px;
+    min-height: 56px;
     display: flex;
     align-items: stretch;
   }
