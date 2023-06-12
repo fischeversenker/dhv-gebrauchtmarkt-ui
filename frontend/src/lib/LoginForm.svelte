@@ -43,7 +43,8 @@
   <div class="field">
     <label class="label" for="username">Username</label>
     <div class="control" class:is-loading={$isLoading}>
-      <input class="input" id="username" type="text" placeholder="pilot1" required bind:value={username} />
+      <!-- svelte-ignore a11y-autofocus -->
+      <input class="input" id="username" type="text" placeholder="pilot1" autofocus required bind:value={username} />
     </div>
   </div>
 
