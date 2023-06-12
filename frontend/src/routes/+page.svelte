@@ -9,7 +9,7 @@
     REACTED_TO_NOTIFICATION_REQUEST_KEY,
     filterCategory,
     filterSearchString,
-    filterSorting,
+    filterOrder,
     homeOffersGotLoaded,
     indexScrollTop,
     notification,
@@ -34,7 +34,7 @@
     $offers = await getOffers($offersOffset);
   });
 
-  unsubscribeFilterSorting = subscribeButSkipFirst(filterSorting, async () => {
+  unsubscribeFilterSorting = subscribeButSkipFirst(filterOrder, async () => {
     if (browser) window.scrollTo({ top: 0, behavior: 'smooth' });
     $offersOffset = 0;
     $offers = await getOffers($offersOffset);

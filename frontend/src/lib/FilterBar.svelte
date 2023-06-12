@@ -1,47 +1,72 @@
 <script lang="ts">
-  import { filterCategory, filterSorting, filterSearchString } from './store';
+  import { derived } from 'svelte/store';
+  import { fade } from 'svelte/transition';
+  import { filterCategory, filterOrder, filterSearchString } from './store';
 
-  const categories = [
+  let showCategorySelect = false;
+  let showOrderSelect = false;
+
+  const categoryOptions = [
     {
       value: 0,
-      label: '🌐 Alles'
+      label: 'Alles'
     },
     {
       value: 1,
-      label: '🪂 Gleitschirme'
+      label: 'Nur Gleitschirme'
     },
     {
       value: 11,
-      label: '💺 Gurtzeuge'
+      label: 'Nur Gurtzeuge'
     },
     {
       value: 4,
-      label: '⛑️ Retter'
+      label: 'Nur Retter'
     },
     {
       value: 5,
-      label: '📳 Zubehör'
+      label: 'Nur Zubehör'
     },
     {
       value: 13,
-      label: '❔ Sonstiges'
+      label: 'Nur Sonstiges'
     }
   ];
 
-  const sortingOptions = [
+  const orderOptions = [
     {
       value: 1,
-      label: '⌚'
+      label: 'Datum: Neuestes zuerst'
     },
     {
       value: 2,
-      label: '💵⬆️'
+      label: 'Preis: Niedrigster zuerst'
     },
     {
       value: 3,
-      label: '💵⬇️'
+      label: 'Preis: Höchster zuerst'
     }
   ];
+
+  const allFiltersInDefault = derived([filterCategory, filterOrder, filterSearchString], ([category, order, searchString]) => {
+    return category === categoryOptions[0].value && order === orderOptions[0].value && searchString === '';
+  });
+
+  function onCategoryClicked(category: number) {
+    $filterCategory = category;
+    showCategorySelect = false;
+  }
+
+  function onOrderClicked(order: number) {
+    $filterOrder = order;
+    showOrderSelect = false;
+  }
+
+  function onResetClicked() {
+    $filterSearchString = '';
+    $filterCategory = 0;
+    $filterOrder = 1;
+  }
 </script>
 
 <nav class="is-flex is-justify-content-space-between has-background-light m-0 px-2 py-2 category-select">
@@ -51,25 +76,61 @@
       <i class="fas fa-search" />
     </span>
   </div>
-  <div class="control">
-    <div class="select">
-      <select bind:value={$filterCategory}>
-        {#each categories as category}
-          <option value={category.value}>{category.label}</option>
-        {/each}
-      </select>
-    </div>
+
+  <div class="buttons has-addons mb-0">
+    <button class="button mb-0" class:is-info={$filterCategory !== 0} on:click={() => (showCategorySelect = true)}>
+      <span class="icon"><i class="fa-solid fa-chart-pie" /></span>
+    </button>
+
+    <button class="button mb-0" class:is-info={$filterOrder !== 1} on:click={() => (showOrderSelect = true)}>
+      <span class="icon"><i class="fa-solid fa-arrow-down-up-across-line" /></span>
+    </button>
   </div>
-  <div class="control">
-    <div class="select">
-      <select bind:value={$filterSorting}>
-        {#each sortingOptions as sortingOption}
-          <option value={sortingOption.value}>{sortingOption.label}</option>
-        {/each}
-      </select>
-    </div>
-  </div>
+
+  <button class="button is-warning" disabled={$allFiltersInDefault} on:click={() => onResetClicked()}>
+    <span class="icon"><i class="fa-sharp fa-solid fa-xmark" /></span>
+  </button>
 </nav>
+
+{#if showCategorySelect}
+  <div class="modal is-active" transition:fade={{ duration: 100 }}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="modal-background" on:click={() => (showCategorySelect = false)} />
+    <div class="modal-content">
+      <div class="box">
+        {#each categoryOptions as category}
+          <button
+            class="button mb-1 is-fullwidth"
+            class:is-info={$filterCategory === category.value}
+            on:click={() => onCategoryClicked(category.value)}
+            >{category.label}
+          </button>
+        {/each}
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" on:click={() => (showCategorySelect = false)} />
+  </div>
+{/if}
+
+{#if showOrderSelect}
+  <div class="modal is-active" transition:fade={{ duration: 100 }}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="modal-background" on:click={() => (showOrderSelect = false)} />
+    <div class="modal-content">
+      <div class="box">
+        {#each orderOptions as sortingOption}
+          <button
+            class="button mb-1 is-fullwidth"
+            class:is-info={$filterOrder === sortingOption.value}
+            on:click={() => onOrderClicked(sortingOption.value)}
+            >{sortingOption.label}
+          </button>
+        {/each}
+      </div>
+    </div>
+    <button class="modal-close is-large" aria-label="close" on:click={() => (showOrderSelect = false)} />
+  </div>
+{/if}
 
 <style>
   .category-select {

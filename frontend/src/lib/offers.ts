@@ -1,7 +1,7 @@
+import type { Offer, OfferPreview } from '@types';
 import { get } from 'svelte/store';
-import { filterCategory, filterSorting, filterSearchString, isLoading, itemsPerPage, myOffers } from './store';
-import type { OfferPreview, Offer } from '@types';
 import { addSeenOffer } from './indexed-db';
+import { filterCategory, filterOrder, filterSearchString, isLoading, itemsPerPage, myOffers } from './store';
 
 export interface ContactFormResult {
   name: string;
@@ -20,7 +20,7 @@ export async function getOffers(offset: number): Promise<OfferPreview[]> {
   const receivedOffers = await fetch(
     `${import.meta.env.VITE_API_BASE}/offers?search=${get(filterSearchString)}&offset=${offset}&itemsPerPage=${get(
       itemsPerPage
-    )}&category=${get(filterCategory)}&order=${get(filterSorting)}`
+    )}&category=${get(filterCategory)}&order=${get(filterOrder)}`
   ).then((res) => res.json());
   isLoading.set(false);
 
