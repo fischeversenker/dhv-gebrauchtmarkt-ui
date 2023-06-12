@@ -16,7 +16,6 @@
     offers,
     offersOffset,
     reactedToNotificationRequest,
-    shouldInfinityScroll,
     subscribeButSkipFirst
   } from '$lib/store';
   import { Client } from '@pusher/push-notifications-web';

@@ -94,4 +94,10 @@
   .price {
     overflow: initial;
   }
+
+  .tag {
+    white-space: initial;
+    min-height: 2em;
+    height: auto;
+  }
 </style>
