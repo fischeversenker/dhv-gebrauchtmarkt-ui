@@ -77,7 +77,7 @@
     </span>
   </div>
 
-  <div class="buttons has-addons mb-0">
+  <div class="buttons has-addons is-flex-wrap-nowrap mb-0">
     <button class="button mb-0" class:is-info={$filterCategory !== 0} on:click={() => (showCategorySelect = true)}>
       <span class="icon"><i class="fa-solid fa-chart-pie" /></span>
     </button>
