@@ -12,6 +12,7 @@ export const offersOffset = writable(0);
 
 export const filterSearchString = writable('');
 export const filterCategory = writable(0);
+export const filterSorting = writable(1);
 
 export const itemsPerPage = writable(6);
 

@@ -9,6 +9,7 @@
     REACTED_TO_NOTIFICATION_REQUEST_KEY,
     filterCategory,
     filterSearchString,
+    filterSorting,
     homeOffersGotLoaded,
     indexScrollTop,
     notification,
@@ -25,8 +26,15 @@
 
   let unsubscribeSelectedCategory: Unsubscriber;
   let unsubscribeFilterSearchString: Unsubscriber;
+  let unsubscribeFilterSorting: Unsubscriber;
 
   unsubscribeSelectedCategory = subscribeButSkipFirst(filterCategory, async () => {
+    if (browser) window.scrollTo({ top: 0, behavior: 'smooth' });
+    $offersOffset = 0;
+    $offers = await getOffers($offersOffset);
+  });
+
+  unsubscribeFilterSorting = subscribeButSkipFirst(filterSorting, async () => {
     if (browser) window.scrollTo({ top: 0, behavior: 'smooth' });
     $offersOffset = 0;
     $offers = await getOffers($offersOffset);
@@ -118,6 +126,7 @@
   onDestroy(() => {
     unsubscribeSelectedCategory?.();
     unsubscribeFilterSearchString?.();
+    unsubscribeFilterSorting?.();
   });
 </script>
 
