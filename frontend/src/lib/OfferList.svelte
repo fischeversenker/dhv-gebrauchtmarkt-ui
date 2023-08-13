@@ -34,7 +34,7 @@
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-gap: 0.5rem;
+    grid-template-columns: repeat(var(--column-count, 2), minmax(0, 1fr));
+    grid-gap: 0.75rem;
   }
 </style>

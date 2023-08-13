@@ -22,6 +22,10 @@ export const user = writable<string | null>(null);
 
 export const myOffers = writable<Set<number>>(new Set());
 
+export const COLUMN_COUNT_STORAGE_KEY = 'columnCount';
+const localStorageColumnCount = (browser && localStorage.getItem(COLUMN_COUNT_STORAGE_KEY)) || 2;
+export const columnCount = writable<1 | 2>(Number(localStorageColumnCount) as 1 | 2);
+
 export const notification = writable<{
   type: 'success' | 'error' | 'info' | 'warning';
   message: string;

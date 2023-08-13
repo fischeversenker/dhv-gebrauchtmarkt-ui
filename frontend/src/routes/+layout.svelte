@@ -6,6 +6,7 @@
   import FirstTimeVisitorModal from '$lib/FirstTimeVisitorModal.svelte';
   import { clearPendingNotifications, connectToIndexedDb } from '$lib/indexed-db';
   import Header from '$lib/Header.svelte';
+  import { columnCount } from '$lib/store';
 
   let worker: ServiceWorker | null = null;
 
@@ -31,7 +32,7 @@
   <link rel="stylesheet" href="/css/brands.min.css" />
 </svelte:head>
 
-<main>
+<main style:--column-count={$columnCount}>
   <Header />
 
   <slot />

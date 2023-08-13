@@ -59,6 +59,10 @@
 </a>
 
 <style>
+  .card {
+    container-type: inline-size;
+  }
+
   .image img {
     max-height: 250px;
     object-fit: cover;
@@ -99,5 +103,15 @@
     white-space: initial;
     min-height: 2em;
     height: auto;
+  }
+
+  /* If the container is larger than 700px */
+  @container (inline-size > 300px) {
+    .image {
+      padding-top: 40%;
+    }
+    .content {
+      height: auto;
+    }
   }
 </style>

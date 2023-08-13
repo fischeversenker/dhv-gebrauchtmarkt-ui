@@ -3,9 +3,10 @@
   import { derived } from 'svelte/store';
   import { fade } from 'svelte/transition';
   import LoginForm from './LoginForm.svelte';
-  import { user } from './store';
+  import { user, columnCount, COLUMN_COUNT_STORAGE_KEY } from './store';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
 
   let showLoginForm = false;
   let isAtHome = derived(page, ($page) => $page.route.id === '/' || $page.route.id === '/offers/mine');
@@ -27,6 +28,12 @@
       $user = (await loginResponse.json()).username;
     }
   });
+
+  function setViewMode(mode: 'list' | 'grid') {
+    const newColumnCount = mode === 'list' ? 1 : 2;
+    if (browser) localStorage.setItem(COLUMN_COUNT_STORAGE_KEY, newColumnCount.toString());
+    $columnCount = newColumnCount;
+  }
 </script>
 
 <nav class="navbar is-light has-shadow">
@@ -40,6 +47,25 @@
             </span>
             <span>Zurück</span>
           </a>
+        </div>
+      {:else}
+        <div class="navbar-item">
+          <div class="field has-addons">
+            <p class="control">
+              <button class="button" class:is-primary={$columnCount === 1} on:click={() => setViewMode('list')}>
+                <span class="icon is-small">
+                  <i class="fas fa-bars"></i>
+                </span>
+              </button>
+            </p>
+            <p class="control">
+              <button class="button" class:is-primary={$columnCount === 2} on:click={() => setViewMode('grid')}>
+                <span class="icon is-small">
+                  <i class="fas fa-grip-vertical"></i>
+                </span>
+              </button>
+            </p>
+          </div>
         </div>
       {/if}
     </div>
