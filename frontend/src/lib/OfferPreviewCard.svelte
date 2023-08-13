@@ -30,10 +30,6 @@
         </p>
       {/if}
 
-      <div class="content">
-        {@html offer.shortDescription}
-      </div>
-
       <div class="tags">
         <span class="tag is-dark">{offerPostedDate}</span>
         {#if offer.sellerAddress}
