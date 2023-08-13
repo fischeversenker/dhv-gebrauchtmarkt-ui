@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run -A --watch backend/src/server.ts"
+    "dev": "deno run -A --watch --unstable backend/src/server.ts"
   },
   "lint": {
     "files": {
