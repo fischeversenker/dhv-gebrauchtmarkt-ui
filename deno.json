@@ -3,19 +3,13 @@
     "dev": "deno run -A --watch --unstable backend/src/server.ts"
   },
   "lint": {
-    "files": {
-      "include": ["backend/"]
-    }
+    "include": ["backend/"]
   },
   "fmt": {
-    "files": {
-      "include": ["backend/"]
-    },
-    "options": {
-      "lineWidth": 120,
-      "indentWidth": 2,
-      "singleQuote": true,
-      "proseWrap": "preserve"
-    }
+    "include": ["backend/"],
+    "lineWidth": 120,
+    "indentWidth": 2,
+    "singleQuote": true,
+    "proseWrap": "preserve"
   }
 }

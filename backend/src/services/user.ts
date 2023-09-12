@@ -36,7 +36,7 @@ export async function login(
   formData.append('pwd2', '');
   formData.append('token', userLoginToken);
 
-  const response = await request('https://service.dhv.de/api/login', {
+  const response = await request('https://service.dhv.de/api/sys/login', {
     method: 'POST',
     body: formData,
     sessionId,
@@ -48,7 +48,10 @@ export async function login(
     throw new Error(`Login failed: ${responseJson.message}`);
   }
 
-  const newSessionId: string = response.headers.get('set-cookie')!.split(';')[0].split('=')[1];
+  const newSessionId: string = response.headers
+    .get('set-cookie')!
+    .split(';')[0]
+    .split('=')[1];
 
   loginFormContent = await getLoginFormResponse(newSessionId);
   if (!loginFormContent.user?.loggedIn) {
@@ -58,9 +61,14 @@ export async function login(
   return newSessionId;
 }
 
-async function getLoginFormResponse(sessionId?: string): Promise<
-  { content: string; success: boolean; user: User; message?: string }
-> {
+async function getLoginFormResponse(
+  sessionId?: string,
+): Promise<{
+  content: string;
+  success: boolean;
+  user: User;
+  message?: string;
+}> {
   const response = await request(
     'https://www.dhv.de/db3/service/gebrauchtmarkt/anmelden',
     { sessionId: sessionId },
