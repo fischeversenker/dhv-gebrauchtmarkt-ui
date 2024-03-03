@@ -12,9 +12,6 @@
     "backend/src/**/*.ts": [
       "deno lint",
       "deno fmt"
-    ],
-    "frontend/src/**/*.{ts,svelte}": [
-      "npm --prefix frontend prettier --plugin-search-dir . --write "
     ]
   },
   "devDependencies": {
