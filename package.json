@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:frontend": "yarn --cwd frontend dev",
+    "start:frontend": "npm --prefix frontend run dev",
     "start:backend": "deno task dev",
     "prepare": "git config core.hooksPath ./.hooks"
   },
@@ -14,7 +14,7 @@
       "deno fmt"
     ],
     "frontend/src/**/*.{ts,svelte}": [
-      "yarn --cwd frontend prettier --plugin-search-dir . --write "
+      "npm --prefix frontend prettier --plugin-search-dir . --write "
     ]
   },
   "devDependencies": {
