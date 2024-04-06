@@ -9,6 +9,7 @@
   import { browser } from '$app/environment';
 
   let showLoginForm = false;
+  let loginEnabled = false;
   let isAtHome = derived(page, ($page) => $page.route.id === '/' || $page.route.id === '/offers/mine');
 
   async function logout() {
@@ -69,25 +70,27 @@
         </div>
       {/if}
     </div>
-    <div class="navbar-end">
-      {#if !$user}
-        <a class="navbar-item" on:click={() => (showLoginForm = true)}>Login</a>
-      {:else}
-        <!-- <div class="navbar-item">{$user}</div> -->
-        <a class="navbar-item" href="/offers/mine">Meine</a>
-        <a class="navbar-item" href="/">Alle</a>
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <a
-          class="navbar-item"
-          on:click={() => {
-            logout();
-          }}
-        >
-          <i class="fa-solid fa-power-off" />
-        </a>
-      {/if}
-    </div>
+    {#if loginEnabled}
+      <div class="navbar-end">
+        {#if !$user}
+          <a class="navbar-item" on:click={() => (showLoginForm = true)}>Login</a>
+        {:else}
+          <!-- <div class="navbar-item">{$user}</div> -->
+          <a class="navbar-item" href="/offers/mine">Meine</a>
+          <a class="navbar-item" href="/">Alle</a>
+          <!-- svelte-ignore a11y-missing-attribute -->
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <a
+            class="navbar-item"
+            on:click={() => {
+              logout();
+            }}
+          >
+            <i class="fa-solid fa-power-off" />
+          </a>
+        {/if}
+      </div>
+    {/if}
   </div>
 </nav>
 
