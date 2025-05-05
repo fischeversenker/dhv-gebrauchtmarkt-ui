@@ -62,7 +62,7 @@ export const offersRouter = new Router()
     formData.append('formid', 'anbieter_kontakt');
 
     const contactResponse = await request(
-      'https://www.dhv.de/db3/service/gebrauchtmarkt/anbieterkontaktieren',
+      'https://service.dhv.de/db3/service/gebrauchtmarkt/anbieterkontaktieren',
       {
         method: 'POST',
         body: formData,
