@@ -1,12 +1,12 @@
 <script lang="ts">
+  import type { Offer } from '@types';
+  import { onDestroy, onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
-  import { contactOffer, type ContactFormResult } from './offers';
-  import type { Offer } from '@types';
-  import { myOffers, notification } from './store';
   import ContactForm from './ContactForm.svelte';
   import GalleryImage from './GalleryImage.svelte';
-  import { onDestroy, onMount } from 'svelte';
+  import { contactOffer, deleteOffer, type ContactFormResult } from './offers';
+  import { myOffers, notification } from './store';
 
   export let offer: Offer;
 
@@ -14,6 +14,7 @@
   let imageIndex = writable(0);
 
   let showContactForm = writable(false);
+  let showDeleteForm = writable(false);
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
 
@@ -67,6 +68,12 @@
       type: result.success ? 'success' : 'error',
       message: result.message
     };
+  }
+
+  async function onDeleteConfirmClicked() {
+    await deleteOffer(offer.id);
+    $showDeleteForm = false;
+    window.history.back();
   }
 
   function onPopState() {
@@ -173,9 +180,12 @@
 
   <div class="block">
     {#if !isMyOffer}
-      <div class="button is-primary is-fullwidth mb-4" on:click={() => ($showContactForm = true)}>Anbieter kontaktieren</div>
+      <button class="button is-primary is-fullwidth mb-4" on:click={() => ($showContactForm = true)}>Anbieter kontaktieren</button>
     {/if}
     <a class="button is-info is-light is-fullwidth" href={offer.url} target="_blank" rel="noreferrer">Im DHV-Gebrauchtmarkt anzeigen</a>
+    {#if isMyOffer}
+      <button class="button is-danger is-fullwidth mt-4" on:click={() => ($showDeleteForm = true)}>Angebot löschen</button>
+    {/if}
   </div>
 
   {#if $showImageModal}
@@ -204,6 +214,25 @@
         </div>
       </div>
       <button class="modal-close is-large" aria-label="close" on:click={() => ($showContactForm = false)} />
+    </div>
+  {/if}
+
+  {#if $showDeleteForm}
+    <div class="modal is-active" transition:fade={{ duration: 100 }}>
+      <div class="modal-background" on:click={() => ($showDeleteForm = false)} />
+      <div class="modal-content">
+        <div class="box">
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-danger" on:click={() => (onDeleteConfirmClicked())}>Angebot endgültig löschen</button>
+            </div>
+            <div class="control">
+              <button class="button is-link is-light" on:click={() => ($showDeleteForm = false)}>Abbrechen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close" on:click={() => ($showDeleteForm = false)} />
     </div>
   {/if}
 </div>

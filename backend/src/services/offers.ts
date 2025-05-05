@@ -4,13 +4,15 @@ import type { CommonOfferProperties, MusterData, Offer, OfferPreview, PriceType 
 export function collectOfferPreviews(rawHtml: string): OfferPreview[] {
   const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
   if (!doc) {
-    throw new Error('couldn\'t parse HTML');
+    throw new Error("couldn't parse HTML");
   }
 
   const offerPreviewElements = doc.querySelectorAll('.gm_offer');
-  const offerPreviews: OfferPreview[] = Array.from(offerPreviewElements).map((offerPreviewElementNode) => {
-    return offerPreviewFromOfferElement(offerPreviewElementNode as Element);
-  });
+  const offerPreviews: OfferPreview[] = Array.from(offerPreviewElements).map(
+    (offerPreviewElementNode) => {
+      return offerPreviewFromOfferElement(offerPreviewElementNode as Element);
+    },
+  );
   return offerPreviews;
 }
 
@@ -22,18 +24,35 @@ function commonOfferPropertiesFromOfferElement(
   const sellerTopElement = sellerElement?.querySelector('.top')!;
   sellerElement?.removeChild(sellerTopElement);
   const sellerAddressElements = sellerElement?.querySelectorAll('li');
-  const sellerCountry = sellerAddressElements?.[0]?.textContent.replace(/Land:? /, '').trim();
-  const sellerCity = sellerAddressElements?.[1]?.textContent.replace(/Ort:? /, '').trim();
-  const postedDateString = sellerAddressElements?.[2]?.textContent.replace('Online seit: ', '')!;
-  const postedDateParts = postedDateString.split('.').map((part) => Number(part.trim()));
-  const postedDate = new Date(postedDateParts[2], postedDateParts[1] - 1, postedDateParts[0]);
+  const sellerCountry = sellerAddressElements?.[0]?.textContent
+    .replace(/Land:? /, '')
+    .trim();
+  const sellerCity = sellerAddressElements?.[1]?.textContent
+    .replace(/Ort:? /, '')
+    .trim();
+  const postedDateString = sellerAddressElements?.[2]?.textContent.replace(
+    'Online seit: ',
+    '',
+  )!;
+  const postedDateParts = postedDateString
+    .split('.')
+    .map((part) => Number(part.trim()));
+  const postedDate = new Date(
+    postedDateParts[2],
+    postedDateParts[1] - 1,
+    postedDateParts[0],
+  );
 
   const sellerAddress = {
     country: sellerCountry,
     city: sellerCity,
   };
 
-  const priceString = offerElement.querySelector('.gm_price')?.textContent?.trim()?.replace('€', '')?.trim()!;
+  const priceString = offerElement
+    .querySelector('.gm_price')
+    ?.textContent?.trim()
+    ?.replace('€', '')
+    ?.trim()!;
   let price: number | undefined = undefined;
   let priceType: PriceType | undefined = undefined;
   if (priceString.includes('Auf Anfrage')) {
@@ -42,7 +61,9 @@ function commonOfferPropertiesFromOfferElement(
     priceType = 'Höchstgebot';
   } else {
     price = Number(priceString);
-    const priceTypeString = offerElement.querySelector('.gm_price_type')?.textContent?.trim()!;
+    const priceTypeString = offerElement
+      .querySelector('.gm_price_type')
+      ?.textContent?.trim()!;
     if (priceTypeString.includes('VB')) {
       priceType = 'VB';
     } else if (priceTypeString.includes('Fixpreis')) {
@@ -62,8 +83,8 @@ function commonOfferPropertiesFromOfferElement(
 function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
   const thumbnailUrl = offerElement
     .querySelector('.gm_offer_image img')
-    ?.getAttribute('src')!
-    .replace('/thumbnail/', '/medium/')!;
+    ?.getAttribute('src')
+    ?.replace('/thumbnail/', '/medium/')!;
   const descriptionElement = offerElement.querySelector(
     '.gm_offer_description',
   );
@@ -106,12 +127,12 @@ function offerPreviewFromOfferElement(offerElement: Element): OfferPreview {
 export function collectOffer(rawHtml: string, id: string): Offer {
   const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
   if (!doc) {
-    throw new Error('couldn\'t parse HTML');
+    throw new Error("couldn't parse HTML");
   }
 
   const offerElement = doc.querySelector(`#gm_offer_id_${id}`);
   if (!offerElement) {
-    throw new Error('couldn\'t find offer element');
+    throw new Error("couldn't find offer element");
   }
 
   const isExpired = rawHtml.includes('Diese Anzeige ist bereits ausgelaufen');

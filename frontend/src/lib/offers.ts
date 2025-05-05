@@ -85,3 +85,12 @@ export async function contactOffer(data: OfferContactData): Promise<{ success: b
   });
   return res.json();
 }
+
+export async function deleteOffer(id: number): Promise<void> {
+  await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+
+  myOffers.update((existingOffers) => { existingOffers.delete(id); return existingOffers; });
+}

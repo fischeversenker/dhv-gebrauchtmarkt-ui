@@ -1,6 +1,6 @@
 import { Router } from '../deps.ts';
-import { request } from '../services/request.ts';
 import { collectOffer, collectOfferPreviews } from '../services/offers.ts';
+import { request } from '../services/request.ts';
 
 export const offersRouter = new Router()
   .get('/', async (context) => {
@@ -33,9 +33,9 @@ export const offersRouter = new Router()
   })
   .get('/:id', async (context) => {
     const id = context.params.id;
-    const offerResponse = await request(`https://www.dhv.de/db3/service/gebrauchtmarkt/anzeige/id/${id}`).then((
-      response,
-    ) => response.json());
+    const offerResponse = await request(
+      `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeige/id/${id}`,
+    ).then((response) => response.json());
     const offerRawHtml = offerResponse.content;
     const offer = collectOffer(offerRawHtml, id);
     context.response.headers.set('Cache-Control', 'max-age=3600');
@@ -61,12 +61,13 @@ export const offersRouter = new Router()
     formData.append('agbAccepted', '1');
     formData.append('formid', 'anbieter_kontakt');
 
-    const contactResponse = await request('https://www.dhv.de/db3/service/gebrauchtmarkt/anbieterkontaktieren', {
-      method: 'POST',
-      body: formData,
-    }).then(
-      (response) => response.json(),
-    );
+    const contactResponse = await request(
+      'https://www.dhv.de/db3/service/gebrauchtmarkt/anbieterkontaktieren',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    ).then((response) => response.json());
 
     if (contactResponse.success === true && contactResponse.message) {
       context.response.body = contactResponse;
@@ -77,4 +78,11 @@ export const offersRouter = new Router()
         message: 'Da ist etwas schief gelaufen. Bitte versuche es erneut.',
       };
     }
+  })
+  .delete('/:id', async (context) => {
+    // TODO: not yet working. looks like the dhvlogin cookie is missing (compare with actual request on dhv.de)
+    await request(
+      `https://www.dhv.de/db3/service/gebrauchtmarkt/anzeigeloeschen/id/${context.params.id}/from/meineanzeigen`,
+    );
+    context.response.body = 'OK';
   });
