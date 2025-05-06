@@ -13,7 +13,7 @@ export const musterdatenRouter = new Router().get('/', async (context) => {
   const aiResponse = await client.responses.create({
     model: 'gpt-4.1-nano',
     instructions:
-      'Es geht um Anzeigen über gebrauchte Gleitschirme. Ich versuche von dem Title einer Anzeige für einen Gleitschirm automatisch auf die korrekte Herstellerbezeichnung für diesen Schirm zu schließen. Beispiel: "GIN Yeti 5 Größe 23", die korrekte Herstellerbezeichnung ist "GIN Yeti 5 23". Weiteres Beispiel "Ozone Modell Alpina 3 Größe S" -> "Ozone Alpina 3 S". Du antwortest NUR mit der korrekten Herstellerbezeichnung oder mit "ka" wenn du es nicht eindeutig weißt. Vermeide jegliches anderes Output. Du bekommst den Titel einer Anzeige und antwortest mit der vermutlichen Bezeichnung des Herstellers.',
+      'Es geht um Anzeigen über gebrauchte Gleitschirme. Ich versuche von dem Title einer Anzeige für einen Gleitschirm automatisch auf die korrekte Herstellerbezeichnung für diesen Schirm zu schließen. Beispiel: "GIN Yeti 5 Größe 23", die korrekte Herstellerbezeichnung ist "GIN Yeti 5 23". Weiteres Beispiel "Ozone Modell Alpina 3 Größe S" -> "Ozone Alpina 3 S". Ein weiteres Beispiel: "GIN Modell GTO 3 Größe XS (18m²), 70 bis 85kg, Farbe rot", die richtige Bezeichnung ist "GIN GTO 3 XS", eine falsche Bezeichnung dafür ist "GIN GTO 3 18". Du antwortest NUR mit der korrekten Herstellerbezeichnung oder mit "ka" wenn du es nicht eindeutig weißt. Vermeide jegliches anderes Output. Du bekommst den Titel einer Anzeige und antwortest mit der vermutlichen Bezeichnung des Herstellers.',
     input: offerTitle,
   });
   console.log(
