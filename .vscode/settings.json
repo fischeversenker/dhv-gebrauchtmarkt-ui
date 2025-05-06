@@ -8,5 +8,8 @@
   "deno.codeLens.test": true,
   "cSpell.words": [
     "dhvsid"
-  ]
+  ],
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/home/felix/.local/share/mise/shims/node"
+  }
 }

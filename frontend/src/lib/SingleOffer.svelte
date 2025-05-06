@@ -60,7 +60,9 @@
       phone: event.detail.phone,
       message: event.detail.message,
       sendToMe: event.detail.sendToMe
-    });
+    }).catch(error => {
+        return { success: false, message: "Da ist leider etwas schiefgelaufen. Bitte probiere es direkt über den offiziellen DHV Gebrauchtmarkt." };
+      });
 
     $showContactForm = false;
 
