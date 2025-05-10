@@ -92,5 +92,13 @@ export async function deleteOffer(id: number): Promise<void> {
     credentials: 'include'
   });
 
-  myOffers.update((existingOffers) => { existingOffers.delete(id); return existingOffers; });
+  myOffers.update((existingOffers) => {
+    existingOffers.delete(id);
+    return existingOffers;
+  });
+}
+
+export async function attemptToFetchMusterdata(offerTitle: string) {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE}/musterdaten?offerTitle=${offerTitle}`, { credentials: 'include' });
+  return res.json();
 }

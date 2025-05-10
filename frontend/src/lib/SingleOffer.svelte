@@ -5,7 +5,7 @@
   import { fade } from 'svelte/transition';
   import ContactForm from './ContactForm.svelte';
   import GalleryImage from './GalleryImage.svelte';
-  import { contactOffer, deleteOffer, type ContactFormResult } from './offers';
+  import { contactOffer, deleteOffer, attemptToFetchMusterdata as attemptToFetchMusterdataFn, type ContactFormResult } from './offers';
   import { myOffers, notification } from './store';
 
   export let offer: Offer;
@@ -17,6 +17,8 @@
   let showDeleteForm = writable(false);
 
   let offerPostedDate = offer.postedDate.toLocaleDateString('de', { dateStyle: 'medium' });
+
+  let attemptToFetchMusterdataFailed = false;
 
   const isMyOffer = $myOffers.has(offer.id);
   const showSubtitle = offer.subtitle || offer.isExpired || !offer.isPublic;
@@ -50,6 +52,15 @@
     const hasDatabaseUrl = offer.musterData.databaseUrl && offer.musterData.databaseUrl !== 'undefined';
 
     return hasClassification && hasTakeoffWeight && hasDatabaseUrl;
+  }
+
+  async function attemptToFetchMusterdata() {
+    const result = await attemptToFetchMusterdataFn(offer.title);
+    if (result.success) {
+      offer.musterData = result.musterData;
+    } else {
+      attemptToFetchMusterdataFailed = true;
+    }
   }
 
   async function onContactFormSubmitted(event: CustomEvent<ContactFormResult>) {
@@ -149,6 +160,12 @@
       </a>
       <hr />
     </div>
+  {:else}
+    {#if attemptToFetchMusterdataFailed}
+      <div class="notification is-danger is-light is-fullwidth"><center>Technische Daten konnten leider nicht geladen werden :(</center></div>
+    {:else}
+      <button class="button is-light is-fullwidth mb-4" type="button" on:click={() => attemptToFetchMusterdata()}>Technische Daten nachladen</button>
+    {/if}
   {/if}
 
   <div class="block">
